@@ -1,0 +1,9 @@
+name: Minetopiavehicles Revamp Main
+version: ${project.version}
+main: me.crack3dc0d3.minetopiavehiclesrevampmain.MinetopiavehiclesRevampMain
+api-version: 1.13
+authors: [Crack3dC0d3]
+description: MinetopiaVehiclesPlugin
+depend:
+  - PlaceholderAPI
+  - ProtocolLib
