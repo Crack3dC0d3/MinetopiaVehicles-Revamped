@@ -13,6 +13,5 @@ Dé copy van de DDG Minetopia voertuigen!
 <details>
     <summary>Commands</summary>
     <p>/vehicle help - Bekijk het help menu</p>
-    <p>/vehicle give (speler) (voertuig) - Geef een voertuig aan een speler - minetopiavehicles.command.give</p>
-    <p>/vehicle menu - Open het voertuig menu - minetopiavehicles.command.menu</p>
+    <p>/vehicle give \<player\></p>
 </details>
