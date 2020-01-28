@@ -18,7 +18,7 @@ import java.util.Arrays;
 public class SubCommandGive implements ISubCommand {
     @Override
     public String getPermission() {
-        return "minteopiavehicles.give";
+        return "minteopiavehicles.command.give";
     }
 
     @Override
