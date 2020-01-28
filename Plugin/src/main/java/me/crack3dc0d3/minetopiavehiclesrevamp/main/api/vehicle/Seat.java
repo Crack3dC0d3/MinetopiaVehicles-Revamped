@@ -1,9 +1,9 @@
 package me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle;
 
-import com.sun.istack.internal.Nullable;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,6 @@ public class Seat {
     private Location offset;
     private Vehicle mainVehicle;
     private ArmorStand seat;
-    private static Seat thisSeat;
 
     public Seat(Vehicle mainVehicle, Location offset) {
         this.mainVehicle = mainVehicle;

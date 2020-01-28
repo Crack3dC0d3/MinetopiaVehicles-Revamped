@@ -6,24 +6,20 @@
 
     <artifactId>minetopiavehicles-revamp-nms-1_12_R1</artifactId>
     <version>0.0.1</version>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>6</source>
-                    <target>6</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
     <parent>
         <groupId>me.crack3dc0d3</groupId>
         <artifactId>minetopiavehicles-revamp-parent</artifactId>
         <version>0.0.1</version>
     </parent>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+            </plugin>
+        </plugins>
+    </build>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -34,11 +30,6 @@
 
 
     <dependencies>
-        <dependency>
-            <groupId>me.crack3dc0d3</groupId>
-            <artifactId>minetopiavehicles-revamp-plugin</artifactId>
-            <version>0.0.1</version>
-        </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>

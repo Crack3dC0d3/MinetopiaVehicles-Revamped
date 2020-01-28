@@ -5,8 +5,8 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import me.crack3dc0d3.minetopiavehiclesrevamp.api.InputHandler;
 import me.crack3dc0d3.minetopiavehiclesrevamp.api.NMS;
-import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.Methods;
 import net.minecraft.server.v1_12_R1.EntityArmorStand;
 import net.minecraft.server.v1_12_R1.PacketPlayInSteerVehicle;
 import org.bukkit.Location;
@@ -18,7 +18,8 @@ import org.bukkit.plugin.Plugin;
 public class NMSHandler implements NMS {
 
     @Override
-    public void handleInput(ProtocolManager manager, Plugin main) {
+    public InputHandler handleInput(ProtocolManager manager, Plugin main) {
+        final InputHandler[] handler = {null};
         manager.addPacketListener(
                 new PacketAdapter(main, ListenerPriority.LOWEST, PacketType.Play.Client.STEER_VEHICLE) {
                     @Override
@@ -48,10 +49,11 @@ public class NMSHandler implements NMS {
                                 a = false;
                                 d = false;
                             }
-                            Methods.handleInput(w, a, s, d, ppisv.c(), event.getPlayer());
+                            handler[0] = new InputHandler(w, a, s, d, ppisv.c(), event.getPlayer());
                         }
                     }
                 });
+        return handler[0];
     }
 
     @Override
@@ -61,8 +63,7 @@ public class NMSHandler implements NMS {
     }
 
     @Override
-    public void openMenu(Player p) {
+    public void openMenu(Player p, Plugin main) {
 
     }
-
 }

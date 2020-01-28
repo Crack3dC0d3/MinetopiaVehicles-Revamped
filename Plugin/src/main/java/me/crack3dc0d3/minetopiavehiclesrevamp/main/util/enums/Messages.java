@@ -2,11 +2,15 @@ package me.crack3dc0d3.minetopiavehiclesrevamp.main.util.enums;
 
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.Main;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 public enum Messages {
 
     MAX_HELICOPTER_HEIGHT("&cJe kan niet hoger vliegen!"),
+    VEHICLE_DOESNT_EXIST("&cVoertuig &4%s &cbestaat niet!"),
+    VEHICLE_GIVEN("&aJe hebt het voertuig \"%s\" gekregen."),
+    INVALID_ARGUMENTS("&cVerkeerde argumenten, gebruik &4%s"),
+    PLAYER_NOT_ONLINE("&cSpeler &4%s &cis niet online!"),
     NO_PERMISSION("&4Je hebt hier geen permissie voor!");
 
 
@@ -16,7 +20,7 @@ public enum Messages {
         this.message = message;
     }
 
-    public static void send(Player player, Messages key, String... placeholders) {
+    public static void send(CommandSender player, Messages key, String... placeholders) {
         if (Main.getMessages().getConfig().getString(key.toString()) != null) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                     String.format(Main.getMessages().getConfig().getString(key.toString()), placeholders)));
@@ -26,7 +30,7 @@ public enum Messages {
         }
     }
 
-    public static void send(Player player, Messages key) {
+    public static void send(CommandSender player, Messages key) {
         if (Main.getMessages().getConfig().getString(key.toString()) != null) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                     Main.getMessages().getConfig().getString(key.toString())));

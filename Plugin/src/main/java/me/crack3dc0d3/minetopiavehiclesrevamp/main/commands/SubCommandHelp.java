@@ -2,7 +2,7 @@ package me.crack3dc0d3.minetopiavehiclesrevamp.main.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 public class SubCommandHelp  implements ISubCommand {
     @Override
@@ -26,7 +26,7 @@ public class SubCommandHelp  implements ISubCommand {
     }
 
     @Override
-    public void execute(Player p, Command command, String[] args) {
+    public void execute(CommandSender sender, Command command, String[] args) {
 
         StringBuilder helpBuilder = new StringBuilder();
         
@@ -41,7 +41,7 @@ public class SubCommandHelp  implements ISubCommand {
         }
         helpBuilder.append(colorFormat("&2---------------------------------------------"));
 
-        p.sendMessage(helpBuilder.toString());
+        sender.sendMessage(helpBuilder.toString());
     }
     
     public String colorFormat(String s){

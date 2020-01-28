@@ -1,7 +1,7 @@
 package me.crack3dc0d3.minetopiavehiclesrevamp.main.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 public interface ISubCommand {
 
@@ -13,6 +13,6 @@ public interface ISubCommand {
 
     String getUsage();
 
-    void execute(Player p, Command command, String[] args);
-    
+    void execute(CommandSender sender, Command command, String[] args);
+
 }

@@ -5,7 +5,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +15,7 @@ public class CommandHandler implements CommandExecutor {
     public static List<ISubCommand> commands = new ArrayList<>();
 
     public CommandHandler() {
-        commands.add(new SubCommandHelp());
+        commands.addAll(Arrays.asList(new SubCommandHelp(), new SubCommandGive()));
     }
 
 
@@ -36,33 +35,24 @@ public class CommandHandler implements CommandExecutor {
         List<String> newArgsList = new ArrayList<>(Arrays.asList(args));
         newArgsList.remove(0);
 
-
-        if(sender instanceof Player) {
-
             for (ISubCommand subcommand : commands
             ) {
                 if (subcommand.getName().equalsIgnoreCase(subCommand)) {
 
                     if(subcommand.getPermission() == null) {
-                        subcommand.execute((Player) sender, command, newArgsList.toArray(new String[0]));
+                        subcommand.execute(sender, command, newArgsList.toArray(new String[0]));
                         return true;
                     }
 
                     if(sender.hasPermission(subcommand.getPermission())) {
-                        subcommand.execute((Player) sender, command, newArgsList.toArray(new String[0]));
+                        subcommand.execute(sender, command, newArgsList.toArray(new String[0]));
                         return true;
                     } else {
-                        Messages.send((Player) sender, Messages.NO_PERMISSION);
+                        Messages.send(sender, Messages.NO_PERMISSION);
                         return true;
                     }
                 }
             }
-        }
-
-
-
-
-
         return true;
     }
 
