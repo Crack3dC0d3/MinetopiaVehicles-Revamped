@@ -1,4 +1,4 @@
-package me.crack3dc0d3.minetopiavehiclesrevamp.main.api;
+package me.crack3dc0d3.minetopiavehiclesrevamp.main.util;
 
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;

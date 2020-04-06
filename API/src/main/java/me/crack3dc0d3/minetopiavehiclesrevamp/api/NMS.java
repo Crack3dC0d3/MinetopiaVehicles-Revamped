@@ -8,12 +8,10 @@ import org.bukkit.plugin.Plugin;
 
 public interface NMS {
 
-    InputHandler handleInput(ProtocolManager manager, Plugin main);
+    void handleInput(ProtocolManager manager, Plugin main);
 
     void setPosition(ArmorStand a, Location pos);
 
     void openMenu(Player p, Plugin main);
-
-
 
 }

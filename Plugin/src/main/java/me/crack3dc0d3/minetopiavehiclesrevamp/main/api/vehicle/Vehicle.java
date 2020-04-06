@@ -1,7 +1,7 @@
 package me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle;
 
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.Main;
-import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.ItemFactory;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.ItemFactory;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.enums.VehicleType;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.Methods;
 import org.bukkit.Location;

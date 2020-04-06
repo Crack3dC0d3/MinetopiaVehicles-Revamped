@@ -2,12 +2,11 @@ package me.crack3dc0d3.minetopiavehiclesrevamp.main;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import me.crack3dc0d3.minetopiavehiclesrevamp.api.InputHandler;
 import me.crack3dc0d3.minetopiavehiclesrevamp.api.NMS;
-import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.Config;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.Config;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleBase;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleManager;
-import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.Methods;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.RegistryHandler;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.enums.Messages;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,7 +14,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
-import java.nio.file.Paths;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 public final class Main extends JavaPlugin {
 
@@ -38,14 +40,14 @@ public final class Main extends JavaPlugin {
 
         protocolManager = ProtocolLibrary.getProtocolManager();
         loadNMS();
-        InputHandler handler = nms.handleInput(protocolManager, this);
-        Methods.handleInput(handler.isW(), handler.isA(), handler.isS(), handler.isD(), handler.isSpace(), handler.getPlayer());
+        nms.handleInput(protocolManager, this);
 
         try {
             loadVehicles();
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
+        RegistryHandler.regsiter(this);
     }
 
     @Override
@@ -92,43 +94,41 @@ public final class Main extends JavaPlugin {
     }
 
     private void loadFiles() {
+        getLogger().info("Loading messages.yml");
         messages = new Config("messages.yml");
         messages.loadConfig();
         Messages.updateMessagesFile();
+        getLogger().info("Loaded messages.yml");
 
+        getLogger().info("Loading settings.yml");
         settings = new Config("settings.yml");
         settings.loadConfig();
+        getLogger().info("Loaded settings.yml");
 
+        getLogger().info("Loading vehicle files");
         try {
             File dir = new File(getDataFolder(), "vehicles");
             if (!dir.exists()) {
                 dir.mkdirs();
-                File localvehicles = Paths.get(this.getClassLoader().getResource("vehicles").toURI()).toFile();
-                if(localvehicles.isDirectory()) {
-                    File[] vehicleFiles = localvehicles.listFiles();
-                    if(vehicleFiles == null) throw new IOException();
-                    for(File f : vehicleFiles) {
-                        InputStream in = new FileInputStream(f);
-                        File outFile = new File(dir, f.getName());
-                        OutputStream out = new FileOutputStream(outFile);
-
-                        byte[] buf = new byte[1024];
-
-                        int len;
-                        while((len = in.read(buf)) > 0) {
-                            out.write(buf, 0, len);
-                        }
-
-                        in.close();
-                        out.close();
-
+                File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+                JarFile jar = new JarFile(jarFile);
+                Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
+                while(entries.hasMoreElements()) {
+                    JarEntry element = entries.nextElement();
+                    if (element.getName().startsWith("vehicles/") && !element.getName().equals("vehicles/")) { //filter according to the path
+                        saveResource(element.getName(), false);
                     }
                 }
+                jar.close();
+
             }
         } catch (Exception ex) {
             getLogger().severe("Er ging iets mis met het laden van de voertuigbestanden, De plugin word nu gestopt.");
+            ex.printStackTrace();
             getPluginLoader().disablePlugin(this);
+            return;
         }
+        getLogger().info("Loaded vehicle files");
     }
 
 
