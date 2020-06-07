@@ -22,7 +22,6 @@ public class Seat {
         this.offset = offset;
         seats.add(this);
         this.mainStand = mainVehicle.getMainStand();
-
     }
 
 

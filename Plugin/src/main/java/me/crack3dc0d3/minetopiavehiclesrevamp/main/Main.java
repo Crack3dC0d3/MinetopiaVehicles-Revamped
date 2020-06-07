@@ -3,11 +3,13 @@ package me.crack3dc0d3.minetopiavehiclesrevamp.main;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import me.crack3dc0d3.minetopiavehiclesrevamp.api.NMS;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.events.Interact;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.Config;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleBase;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleManager;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.RegistryHandler;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.enums.Messages;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -41,6 +43,8 @@ public final class Main extends JavaPlugin {
         protocolManager = ProtocolLibrary.getProtocolManager();
         loadNMS();
         nms.handleInput(protocolManager, this);
+
+        Bukkit.getPluginManager().registerEvents(new Interact(), this);
 
         try {
             loadVehicles();
@@ -120,7 +124,13 @@ public final class Main extends JavaPlugin {
                     }
                 }
                 jar.close();
-
+            }
+            if(dir.isDirectory() && dir.listFiles() != null) {
+                for (File f: dir.listFiles()) {
+                    FileConfiguration config = new YamlConfiguration();
+                    config.load(f);
+                    VehicleManager.addBase(VehicleBase.fromYML(config));
+            }
             }
         } catch (Exception ex) {
             getLogger().severe("Er ging iets mis met het laden van de voertuigbestanden, De plugin word nu gestopt.");

@@ -58,6 +58,7 @@ public class SubCommandGive implements ISubCommand {
         ItemMeta im = toGive.getItemMeta();
         im.setDisplayName(vehicle.getDisplayname());
         im.setLore(Arrays.asList(" ", ChatColor.COLOR_CHAR + "a" + Methods.generateLicencePlate()));
+        toGive.setItemMeta(im);
         target.getInventory().addItem(toGive);
     }
 }

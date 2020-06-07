@@ -46,4 +46,7 @@ public class VehicleManager {
         return null;
     }
 
+    public static List<VehicleBase> getBaseVehicles() {
+        return baseVehicles;
+    }
 }

@@ -22,5 +22,6 @@ skin:
     ==: ItemMeta
     meta-type: UNSPECIFIC
     Damage: 1041
+    unbreakable: true
   type: DIAMOND_HOE
 type: CAR
