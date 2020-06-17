@@ -11,6 +11,7 @@ public enum Messages {
     VEHICLE_GIVEN("&aJe hebt het voertuig \"%s\" gekregen."),
     INVALID_ARGUMENTS("&cVerkeerde argumenten, gebruik &4%s"),
     PLAYER_NOT_ONLINE("&cSpeler &4%s &cis niet online!"),
+    SEAT_FULL("&cEr zit al iemand op deze stoel!"),
     NO_PERMISSION("&4Je hebt hier geen permissie voor!");
 
 

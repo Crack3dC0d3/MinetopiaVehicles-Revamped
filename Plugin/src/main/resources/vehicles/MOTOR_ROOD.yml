@@ -14,14 +14,15 @@ seatOffsets:
     x: 0
     y: -0.8
     z: 0
-
+# Het type voertuig. CAR voor een auto/motor. HELICOPTER voor een helikopter.
+type: CAR
 # Item van het voertuig. Link voor documentatie: https://www.spigotmc.org/wiki/itemstack-serialization/
 skin:
   ==: org.bukkit.inventory.ItemStack
+  damage: 1041
   meta:
     ==: ItemMeta
     meta-type: UNSPECIFIC
     Damage: 1041
-    unbreakable: true
+    Unbreakable: true
   type: DIAMOND_HOE
-type: CAR

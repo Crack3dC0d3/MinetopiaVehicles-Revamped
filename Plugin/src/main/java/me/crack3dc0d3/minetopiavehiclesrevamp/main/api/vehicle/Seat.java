@@ -12,7 +12,6 @@ public class Seat {
 
     public static List<Seat> seats = new ArrayList<>();
 
-    private ArmorStand mainStand;
     private Location offset;
     private Vehicle mainVehicle;
     private ArmorStand seat;
@@ -21,14 +20,13 @@ public class Seat {
         this.mainVehicle = mainVehicle;
         this.offset = offset;
         seats.add(this);
-        this.mainStand = mainVehicle.getMainStand();
     }
 
 
 
     public void spawn() {
-
-        Entity armorstand = mainStand.getWorld().spawn(mainStand.getLocation().add(offset), ArmorStand.class);
+        this.offset.setWorld(mainVehicle.getMainStand().getWorld());
+        Entity armorstand = mainVehicle.getMainStand().getWorld().spawn(mainVehicle.getMainStand().getLocation().add(offset), ArmorStand.class);
         ArmorStand stand = (ArmorStand) armorstand;
         //stand.setVisible(false);
         stand.setInvulnerable(true);
@@ -57,10 +55,6 @@ public class Seat {
 
     public Vehicle getMainVehicle() {
         return mainVehicle;
-    }
-
-    public ArmorStand getMainStand() {
-        return mainStand;
     }
 
     public Location getOffset() {

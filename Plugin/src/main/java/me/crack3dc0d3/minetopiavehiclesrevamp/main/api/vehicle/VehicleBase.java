@@ -16,13 +16,14 @@ public class VehicleBase {
 
     private String name, displayname;
 
-    private int baseSpeed, traction;
+    private int baseSpeed;
+    private double traction;
 
     private ItemStack skinItem;
 
     private VehicleType type;
 
-    public VehicleBase(Location mainSeatOffset, Location[] seatOffsets, String name, String displayname, int baseSpeed, int traction, ItemStack skinItem, VehicleType type) {
+    public VehicleBase(Location mainSeatOffset, Location[] seatOffsets, String name, String displayname, int baseSpeed, double traction, ItemStack skinItem, VehicleType type) {
         this.mainSeatOffset = mainSeatOffset;
         this.seatOffsets = seatOffsets;
         this.name = name;
@@ -44,6 +45,7 @@ public class VehicleBase {
     public String getName() {
         return name;
     }
+
     public String getDisplayname() {
         return displayname;
     }
@@ -52,7 +54,7 @@ public class VehicleBase {
         return baseSpeed;
     }
 
-    public int getTraction() {
+    public double getTraction() {
         return traction;
     }
 
@@ -79,7 +81,7 @@ public class VehicleBase {
                 config.getString("name"),
                 config.getString("displayname"),
                 config.getInt("baseSpeed"),
-                config.getInt("traction"),
+                config.getDouble("traction"),
                 config.getItemStack("skin"),
                 VehicleType.valueOf(config.getString("type")));
     }

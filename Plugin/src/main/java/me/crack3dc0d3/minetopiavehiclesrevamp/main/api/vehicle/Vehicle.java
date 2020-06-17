@@ -114,9 +114,14 @@ public class Vehicle {
             }.runTaskTimer(Main.getInstance(), 0L, 1L);
 
         }
+
+        spawned = true;
     }
 
-    public void despawn() {
+    public void despawn(Player player) {
+
+
+
         mainStand.remove();
         skinStand.remove();
         if(type == VehicleType.HELICOPTER) {
@@ -125,7 +130,7 @@ public class Vehicle {
         for(Seat s : seats) {
             s.getSeatStand().remove();
         }
-
+        spawned = false;
     }
 
     public String getName() {
@@ -255,13 +260,12 @@ public class Vehicle {
             Location fbvp = locvp.add(locvp.getDirection().setY(0).normalize().multiply(seat.getOffset().getX()));
             float zvp = (float) (fbvp.getZ() + (seat.getOffset().getZ() * Math.sin(Math.toRadians(fbvp.getYaw()))));
             float xvp = (float) (fbvp.getX() + (seat.getOffset().getZ() * Math.cos(Math.toRadians(fbvp.getYaw()))));
-            Location loc = new Location(seat.getMainStand().getWorld(),
+            Location loc = new Location(seat.getMainVehicle().getMainStand().getWorld(),
                     xvp,
                     mainStand.getLocation().getY() + seat.getOffset().getY(),
                     zvp,
                     fbvp.getYaw(),
                     fbvp.getPitch());
-
                     Methods.setPosition(seat.getSeatStand(), loc);
         }
         Location loc = mainStand.getLocation().clone();
@@ -306,5 +310,7 @@ public class Vehicle {
             wiekStand.setHelmet(new ItemStack(Material.AIR));
         }
     }
+
+
 
 }

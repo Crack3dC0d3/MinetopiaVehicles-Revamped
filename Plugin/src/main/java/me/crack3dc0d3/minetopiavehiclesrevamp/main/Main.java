@@ -3,20 +3,17 @@ package me.crack3dc0d3.minetopiavehiclesrevamp.main;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import me.crack3dc0d3.minetopiavehiclesrevamp.api.NMS;
-import me.crack3dc0d3.minetopiavehiclesrevamp.main.events.Interact;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.Config;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleBase;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleManager;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.RegistryHandler;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.enums.Messages;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
-import java.net.URL;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -39,19 +36,19 @@ public final class Main extends JavaPlugin {
         instance = this;
         loadFiles();
 
-
         protocolManager = ProtocolLibrary.getProtocolManager();
         loadNMS();
         nms.handleInput(protocolManager, this);
 
-        Bukkit.getPluginManager().registerEvents(new Interact(), this);
+
+        //Bukkit.getPluginManager().registerEvents(new Interact(), this);
 
         try {
             loadVehicles();
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
-        RegistryHandler.regsiter(this);
+        RegistryHandler.register(this);
     }
 
     @Override
@@ -106,39 +103,48 @@ public final class Main extends JavaPlugin {
 
         getLogger().info("Loading settings.yml");
         settings = new Config("settings.yml");
+
         settings.loadConfig();
+
+        settings.getConfig().addDefault("max-helicopter-height", 200);
+        settings.getConfig().addDefault("breakSpeed", 0.05);
+        settings.getConfig().options().copyDefaults(true);
+        settings.saveConfig();
+
+
+
         getLogger().info("Loaded settings.yml");
 
-        getLogger().info("Loading vehicle files");
-        try {
-            File dir = new File(getDataFolder(), "vehicles");
-            if (!dir.exists()) {
-                dir.mkdirs();
-                File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
-                JarFile jar = new JarFile(jarFile);
-                Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
-                while(entries.hasMoreElements()) {
-                    JarEntry element = entries.nextElement();
-                    if (element.getName().startsWith("vehicles/") && !element.getName().equals("vehicles/")) { //filter according to the path
-                        saveResource(element.getName(), false);
-                    }
-                }
-                jar.close();
-            }
-            if(dir.isDirectory() && dir.listFiles() != null) {
-                for (File f: dir.listFiles()) {
-                    FileConfiguration config = new YamlConfiguration();
-                    config.load(f);
-                    VehicleManager.addBase(VehicleBase.fromYML(config));
-            }
-            }
-        } catch (Exception ex) {
-            getLogger().severe("Er ging iets mis met het laden van de voertuigbestanden, De plugin word nu gestopt.");
-            ex.printStackTrace();
-            getPluginLoader().disablePlugin(this);
-            return;
-        }
-        getLogger().info("Loaded vehicle files");
+//        getLogger().info("Loading vehicle files");
+//        try {
+//            File dir = new File(getDataFolder(), "vehicles");
+//            if (!dir.exists()) {
+//                dir.mkdirs();
+//                File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+//                JarFile jar = new JarFile(jarFile);
+//                Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
+//                while(entries.hasMoreElements()) {
+//                    JarEntry element = entries.nextElement();
+//                    if (element.getName().startsWith("vehicles/") && !element.getName().equals("vehicles/")) { //filter according to the path
+//                        saveResource(element.getName(), false);
+//                    }
+//                }
+//                jar.close();
+//            }
+//            if(dir.isDirectory() && dir.listFiles() != null) {
+//                for (File f: dir.listFiles()) {
+//                    FileConfiguration config = new YamlConfiguration();
+//                    config.load(f);
+//                    VehicleManager.addBase(VehicleBase.fromYML(config));
+//            }
+//            }
+//        } catch (Exception ex) {
+//            getLogger().severe("Er ging iets mis met het laden van de voertuigbestanden, De plugin word nu gestopt.");
+//            ex.printStackTrace();
+//            getPluginLoader().disablePlugin(this);
+//            return;
+//        }
+//        getLogger().info("Loaded vehicle files");
     }
 
 

@@ -5,18 +5,13 @@ import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.enums.VehicleType;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.InputManager;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.Methods;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.enums.Messages;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 public class VehicleMover {
-    float yaw = 0;
-    int w = 0;
-    boolean w2 = false;
-    double w3 = 0;
-
-
 
     public static Vector addRightVelocity(ArmorStand as, int direction, float vectorSize) {
         Vector vel = as.getVelocity().clone();
@@ -67,8 +62,6 @@ public class VehicleMover {
             vehicle.getMainStand().setVelocity(new Vector(0, 0, 0));
         }
 
-
-
         if (w) {
             if (vehicle.getCurSpeed() < vehicle.getSpeed()) {
                 if (vehicle.getCurSpeed() < 0) {
@@ -76,10 +69,12 @@ public class VehicleMover {
                 } else {
                     vehicle.setCurSpeed(vehicle.getCurSpeed() + vehicle.getOptrekSpeed());
                 }
+                Bukkit.broadcastMessage(vehicle.getCurSpeed()+ "");
             } else {
                 vehicle.setCurSpeed(vehicle.getSpeed());
             }
         } else if (s) {
+            Bukkit.broadcastMessage("S");
             if (vehicle.getCurSpeed() > -(vehicle.getSpeed() / 4D)) {
                 if (vehicle.getCurSpeed() > 0) {
                     vehicle.setCurSpeed(vehicle.getCurSpeed() - (vehicle.getOptrekSpeed() + 0.02D));
@@ -90,14 +85,30 @@ public class VehicleMover {
                 vehicle.setCurSpeed(-(vehicle.getSpeed() / 4D));
             }
         } else {
-            double kloenk = Main    .getInstance().getConfig().getDouble("kloenksnelheid");
-            if(vehicle.getCurSpeed() < 0) {
-                vehicle.setCurSpeed(vehicle.getCurSpeed() + kloenk);
-            } else if(vehicle.getCurSpeed() > 0){
-                vehicle.setCurSpeed(vehicle.getCurSpeed() - kloenk);
-            } else {
+            double breakSpeed = Main.getInstance().getSettings().getConfig().getDouble("breakSpeed");
+
+            if(vehicle.getCurSpeed() >= -(breakSpeed) && vehicle.getCurSpeed() <= breakSpeed) {
                 vehicle.setCurSpeed(0);
             }
+
+            if(vehicle.getCurSpeed() < breakSpeed && vehicle.getCurSpeed() != 0) {
+                vehicle.setCurSpeed(vehicle.getCurSpeed() + breakSpeed);
+            }
+
+            if(vehicle.getCurSpeed() > breakSpeed && vehicle.getCurSpeed() != 0) {
+                vehicle.setCurSpeed(vehicle.getCurSpeed() - breakSpeed);
+            }
+
+//            if(vehicle.getCurSpeed() < breakSpeed && ) {
+//                vehicle.setCurSpeed(vehicle.getCurSpeed() + breakSpeed);
+//            } else if(vehicle.getCurSpeed() > breakSpeed && vehicle.getCurSpeed() != 0.0){
+//                vehicle.setCurSpeed(vehicle.getCurSpeed() - breakSpeed);
+//            } else {
+//                vehicle.setCurSpeed(0);
+//            }
+
+
+
         }
         if(vehicle.getType() == VehicleType.HELICOPTER) {
             if (space) {
@@ -166,22 +177,21 @@ public class VehicleMover {
         vehicle.getMainStand().setGravity(true);
         Vector main = new Vector(vehicle.getMainStand().getLocation().getDirection().multiply(0.5).getX(), -1 * vehicle.getCurSpeed(), vehicle.getMainStand().getLocation().getDirection().multiply(0.5).getZ()).multiply(vehicle.getCurSpeed());
         if(vehicle.getType() == VehicleType.HELICOPTER) {
-
-
-
             main = new Vector(vehicle.getMainStand().getLocation().getDirection().multiply(0.5).getX(), vehicle.getCurUpSpeed(), vehicle.getMainStand().getLocation().getDirection().multiply(0.5).getZ()).multiply(vehicle.getCurSpeed());
             main.setY(vehicle.getCurUpSpeed());
-
-
             //Bukkit.broadcastMessage( "" + vehicle.getCurUpSpeed());
         }
         vehicle.getMainStand().setVelocity((main.add(toAdd)));
-        if(vehicle.getMainStand().getLocation().getY() > Main.getInstance().getConfig().getInt("max-helicopter-height")) {
-            Location toLoc = new Location(vehicle.getMainStand().getLocation().getWorld(), vehicle.getMainStand().getLocation().getX(), Main.getInstance().getConfig().getInt("max-helicopter-height") - 2, vehicle.getMainStand().getLocation().getZ());
+        if(vehicle.getMainStand().getLocation().getY() >= Main.getInstance().getSettings().getConfig().getInt("max-helicopter-height")) {
+            Location toLoc = new Location(vehicle.getMainStand().getLocation().getWorld(), vehicle.getMainStand().getLocation().getX(), Main.getInstance().getSettings().getConfig().getInt("max-helicopter-height") - 2, vehicle.getMainStand().getLocation().getZ());
             vehicle.setUpSpeed(0);
-            vehicle.getMainStand().teleport(toLoc);
+            Methods.setPosition(vehicle.getMainStand(), toLoc);
             Messages.send(p, Messages.MAX_HELICOPTER_HEIGHT);
         }
+        if(vehicle.getType() == VehicleType.CAR) {
+            vehicle.setCurUpSpeed(0);
+        }
+        Bukkit.broadcastMessage(vehicle.getCurSpeed() + "");
         vehicle.updatePositions();
     }
 

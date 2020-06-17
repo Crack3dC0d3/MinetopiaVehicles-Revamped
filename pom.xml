@@ -15,6 +15,7 @@
         <module>API</module>
         <module>Plugin</module>
         <module>v1_12_R1</module>
+        <module>v1_15_R1</module>
     </modules>
 
     <properties>
