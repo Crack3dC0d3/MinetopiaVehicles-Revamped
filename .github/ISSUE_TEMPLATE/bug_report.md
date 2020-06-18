@@ -23,8 +23,8 @@ Een duidelijke beschrijving van wat er nou echt gebeurt
 **Screenshots**
 Als screenshots het beeld van de bug/glitch/fout versterken graag bijvoegen.
 
-**Versie**
-Welke versie van de plugin gebruik je?
+**Versies**
+Welke versie is je server en welke versie van de plugin gebruik je?
 
 **Opmerkingen**
 Nog opmerkingen?
