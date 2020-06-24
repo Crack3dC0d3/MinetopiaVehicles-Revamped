@@ -33,7 +33,7 @@ public class SubCommandGive implements ISubCommand {
 
     @Override
     public String getUsage() {
-        return "/vehicle give <player> <vehiclename>";
+        return "vehicle give <player> <vehiclename>";
     }
 
 

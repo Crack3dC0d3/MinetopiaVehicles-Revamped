@@ -4,11 +4,9 @@ import me.crack3dc0d3.minetopiavehiclesrevamp.api.ApiMethods;
 import me.crack3dc0d3.minetopiavehiclesrevamp.api.InputHandler;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.Main;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Seat;
-import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleMover;
 import org.apache.commons.lang.RandomStringUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Methods implements ApiMethods {

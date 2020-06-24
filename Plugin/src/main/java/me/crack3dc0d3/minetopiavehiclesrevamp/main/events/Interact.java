@@ -17,7 +17,6 @@ import org.bukkit.inventory.EquipmentSlot;
 
 public class Interact implements Listener {
 
-    private int fire = 0;
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -35,8 +34,6 @@ public class Interact implements Listener {
                 }
             }
         }
-        fire++;
-        Bukkit.broadcastMessage(fire + "");
     }
 
     @EventHandler
@@ -45,18 +42,27 @@ public class Interact implements Listener {
             if(event.getRightClicked().getCustomName().startsWith("MINETOPIAVEHICLES")) {
                 String[] strings  = event.getRightClicked().getCustomName().split("_");
                 Vehicle v = VehicleManager.getVehicleByPlate(strings[strings.length-1]);
-                Seat s = v.getMainSeat();
                 if(!v.getMainSeat().getSeatStand().getPassengers().isEmpty()) {
                     for(Seat seat : v.getSeats()) {
-                        if(seat != v.getMainSeat() || seat.getSeatStand().getPassengers().isEmpty()) {
+                        if(event.getRightClicked() == seat.getSeatStand()) {
+                            if(!event.getRightClicked().getPassengers().isEmpty()) {
+                                Messages.send(event.getPlayer(), Messages.SEAT_FULL);
+                                return;
+                            }
                             seat.getSeatStand().addPassenger(event.getPlayer());
+
                         }
+//                        if(seat != v.getMainSeat() || seat.getSeatStand().getPassengers().isEmpty()) {
+//                            seat.getSeatStand().addPassenger(event.getPlayer());
+//                        }
                     }
                 }
+                Seat s = v.getMainSeat();
                 if(!s.getSeatStand().getPassengers().isEmpty()) {
                     Messages.send(event.getPlayer(), Messages.SEAT_FULL);
                 }
                 s.getSeatStand().addPassenger(event.getPlayer());
+                event.setCancelled(true);
             }
         }
 

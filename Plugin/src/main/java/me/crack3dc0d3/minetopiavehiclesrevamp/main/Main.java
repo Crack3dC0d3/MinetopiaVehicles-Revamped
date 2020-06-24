@@ -6,6 +6,8 @@ import me.crack3dc0d3.minetopiavehiclesrevamp.api.NMS;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.Config;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleBase;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleManager;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.IDataSource;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.SQLiteDataSource;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.RegistryHandler;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.enums.Messages;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -14,9 +16,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 public final class Main extends JavaPlugin {
 
@@ -26,6 +25,7 @@ public final class Main extends JavaPlugin {
 
     private static Config settings;
     private static Config messages;
+    private static IDataSource databaseUtil;
 
     private static ProtocolManager protocolManager;
 
@@ -39,8 +39,8 @@ public final class Main extends JavaPlugin {
         protocolManager = ProtocolLibrary.getProtocolManager();
         loadNMS();
         nms.handleInput(protocolManager, this);
-
-
+        databaseUtil = new SQLiteDataSource();
+        databaseUtil.init();
         //Bukkit.getPluginManager().registerEvents(new Interact(), this);
 
         try {
@@ -92,6 +92,7 @@ public final class Main extends JavaPlugin {
                 this.getLogger().info("Loaded vehicle " + f.getName());
             }
         }
+        VehicleManager.addVehicle(databaseUtil.getVehicles());
     }
 
     private void loadFiles() {
@@ -166,5 +167,9 @@ public final class Main extends JavaPlugin {
 
     public static ProtocolManager getProtocolManager() {
         return protocolManager;
+    }
+
+    public static IDataSource getDatabaseUtil() {
+        return databaseUtil;
     }
 }

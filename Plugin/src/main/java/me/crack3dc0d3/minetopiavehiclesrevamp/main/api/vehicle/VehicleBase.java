@@ -72,6 +72,7 @@ public class VehicleBase {
         for(String s : config.getConfigurationSection("seatOffsets").getKeys(false)) {
             if(s.equals(config.getString("mainSeat"))) {
                 mainSeatOffset = new Location(null, config.getInt("seatOffsets." + s + ".x"), config.getInt("seatOffsets." + s + ".y"), config.getInt("seatOffsets." + s + ".z"));
+                continue;
             }
             seatOffsets.add(new Location(null, config.getInt("seatOffsets." + s + ".x"), config.getInt("seatOffsets." + s + ".y"), config.getInt("seatOffsets." + s + ".z")));
         }

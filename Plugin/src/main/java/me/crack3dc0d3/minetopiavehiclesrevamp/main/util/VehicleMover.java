@@ -1,7 +1,10 @@
-package me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle;
+package me.crack3dc0d3.minetopiavehiclesrevamp.main.util;
 
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.Main;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.enums.VehicleType;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Seat;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Vehicle;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleManager;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.InputManager;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.Methods;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.enums.Messages;
@@ -69,12 +72,10 @@ public class VehicleMover {
                 } else {
                     vehicle.setCurSpeed(vehicle.getCurSpeed() + vehicle.getOptrekSpeed());
                 }
-                Bukkit.broadcastMessage(vehicle.getCurSpeed()+ "");
             } else {
                 vehicle.setCurSpeed(vehicle.getSpeed());
             }
         } else if (s) {
-            Bukkit.broadcastMessage("S");
             if (vehicle.getCurSpeed() > -(vehicle.getSpeed() / 4D)) {
                 if (vehicle.getCurSpeed() > 0) {
                     vehicle.setCurSpeed(vehicle.getCurSpeed() - (vehicle.getOptrekSpeed() + 0.02D));
@@ -191,7 +192,6 @@ public class VehicleMover {
         if(vehicle.getType() == VehicleType.CAR) {
             vehicle.setCurUpSpeed(0);
         }
-        Bukkit.broadcastMessage(vehicle.getCurSpeed() + "");
         vehicle.updatePositions();
     }
 

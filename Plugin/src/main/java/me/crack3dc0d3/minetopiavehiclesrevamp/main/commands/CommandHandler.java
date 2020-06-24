@@ -17,6 +17,7 @@ public class CommandHandler implements CommandExecutor {
     public CommandHandler() {
         commands.addAll(Arrays.asList(
                 new SubCommandHelp(),
+                new SubCommandList(),
                 new SubCommandGive()
         ));
     }

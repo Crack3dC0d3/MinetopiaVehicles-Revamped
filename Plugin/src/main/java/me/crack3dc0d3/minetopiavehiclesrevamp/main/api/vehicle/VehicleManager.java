@@ -3,6 +3,7 @@ package me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class VehicleManager {
@@ -17,6 +18,8 @@ public class VehicleManager {
     public static void addVehicle(Vehicle vehicle) {
         vehicles.add(vehicle);
     }
+
+    public static void addVehicle(Collection<Vehicle> vehicle) {vehicles.addAll(vehicle);}
 
     public static void removeVehicle(Vehicle vehicle) {
         vehicles.remove(vehicle);

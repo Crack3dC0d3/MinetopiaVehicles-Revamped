@@ -1,11 +1,14 @@
 package me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle;
 
+import com.google.gson.annotations.Expose;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.Main;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.ItemFactory;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.enums.VehicleType;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.Methods;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -18,20 +21,34 @@ import java.util.UUID;
 
 public class Vehicle {
 
+    private int id;
+    @Expose
     private Seat[] seats;
+    @Expose
     private String licensePlate, name;
     private Seat mainSeat;
     private ArmorStand mainStand;
     private ArmorStand skinStand, wiekStand;
     private double curSpeed = 0;
     private double curUpSpeed = 0;
+    @Expose
     private double traction;
+    @Expose
     private double baseSpeed;
+    @Expose
     private List<UUID> members, riders;
+    @Expose
     private ItemStack skinItem;
+    @Expose
     private VehicleType type;
-    private double upSpeed, downSpeed, maxUpSpeed;
+    private double upSpeed, downSpeed;
+    @Expose
+    private double maxUpSpeed;
+    @Expose
     private boolean spawned;
+    @Expose
+    private UUID owneruuid;
+    private OfflinePlayer owner;
 
     public Vehicle(VehicleBase base, String licensePlate) {
         this.traction = base.getTraction();
@@ -41,13 +58,12 @@ public class Vehicle {
         this.skinItem = base.getSkinItem();
 
         List<Seat> seatList = new ArrayList<>();
+        seatList.add(new Seat(this, base.getMainSeatOffset(), true));
         for (Location seatOffset: base.getSeatOffsets()
              ) {
-            Seat s = new Seat(this, seatOffset);
-            seatList.add(s);
+            seatList.add(new Seat(this, seatOffset, false));
         }
         this.seats = seatList.toArray(new Seat[0]);
-        this.mainSeat = seats[0];
 
         riders = new ArrayList<>();
         members = new ArrayList<>();
@@ -56,7 +72,6 @@ public class Vehicle {
     }
 
     public void spawn(Location spawnLoc) {
-        spawned = true;
         Location ploc = spawnLoc.add(0, 1, 0);
         ArmorStand vehicle = (ArmorStand) ploc.getWorld().spawn(ploc, ArmorStand.class);
         //vehicle.setVisible(false);
@@ -114,14 +129,11 @@ public class Vehicle {
             }.runTaskTimer(Main.getInstance(), 0L, 1L);
 
         }
-
+        Main.getDatabaseUtil().saveVehicle(this);
         spawned = true;
     }
 
     public void despawn(Player player) {
-
-
-
         mainStand.remove();
         skinStand.remove();
         if(type == VehicleType.HELICOPTER) {
@@ -131,6 +143,7 @@ public class Vehicle {
             s.getSeatStand().remove();
         }
         spawned = false;
+        Main.getDatabaseUtil().saveVehicle(this);
     }
 
     public String getName() {
@@ -173,7 +186,25 @@ public class Vehicle {
         return licensePlate;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public Seat getMainSeat() {
+
+        if(mainSeat == null) {
+            for (Seat s: seats
+                 ) {
+                if(s.isMain()) {
+                    mainSeat = s;
+                    break;
+                }
+            }
+        }
         return mainSeat;
     }
 
@@ -233,6 +264,16 @@ public class Vehicle {
         return downSpeed;
     }
 
+    public boolean isSpawned() {
+        return spawned;
+    }
+
+    public OfflinePlayer getOwner() {
+        if(owner == null) {
+            owner = Bukkit.getOfflinePlayer(owneruuid);
+        }
+        return owner;
+    }
 
     public void removeNoTemp() {
 
