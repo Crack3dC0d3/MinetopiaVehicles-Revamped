@@ -2,8 +2,8 @@ package me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle;
 
 import com.google.gson.annotations.Expose;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -13,16 +13,21 @@ public class Seat {
 
     public static List<Seat> seats = new ArrayList<>();
     @Expose
-    private Location offset;
+    private String offset;
+    private Location offsetLoc;
     private Vehicle mainVehicle;
     private ArmorStand seat;
     @Expose
     private boolean main;
+    @Expose
+    private String plate;
 
     public Seat(Vehicle mainVehicle, Location offset, boolean isMain) {
         this.mainVehicle = mainVehicle;
-        this.offset = offset;
+        this.offsetLoc = offset;
+        this.offset = getStringLocation(offset);
         this.main = isMain;
+        this.plate = mainVehicle.getLicensePlate();
         seats.add(this);
     }
 
@@ -30,8 +35,8 @@ public class Seat {
      * Spawns the seat and assigns the armorstand variables
      */
     public void spawn() {
-        this.offset.setWorld(mainVehicle.getMainStand().getWorld());
-        ArmorStand stand = mainVehicle.getMainStand().getWorld().spawn(mainVehicle.getMainStand().getLocation().add(offset), ArmorStand.class);
+        this.offsetLoc.setWorld(mainVehicle.getMainStand().getWorld());
+        ArmorStand stand = mainVehicle.getMainStand().getWorld().spawn(mainVehicle.getMainStand().getLocation().add(offsetLoc), ArmorStand.class);
         //stand.setVisible(false);
         stand.setInvulnerable(true);
         stand.setCustomNameVisible(false);
@@ -73,8 +78,8 @@ public class Seat {
      * Gets the offset from the main armorstand
      * @return The offset from the main armorstand
      */
-    public Location getOffset() {
-        return offset;
+    public Location getOffsetLoc() {
+        return offsetLoc;
     }
 
     /**
@@ -99,5 +104,43 @@ public class Seat {
      */
     public void setMainVehicle(Vehicle mainVehicle) {
         this.mainVehicle = mainVehicle;
+    }
+
+    public void setSeat(ArmorStand seat) {
+        this.seat = seat;
+    }
+
+    public static void addSeat(Seat s) {
+        seats.add(s);
+    }
+
+    public void updateOffset() {
+        offsetLoc = getLocationString(offset);
+    }
+
+    public String getStringLocation(final Location l) {
+        if (l == null) {
+            return "";
+        }
+        return "fietsbel:" + l.getBlockX() + ":" + l.getBlockY() + ":" + l.getBlockZ();
+    }
+
+    public Location getLocationString(final String s) {
+        if (s == null || s.trim().equals("")) {
+            return null;
+        }
+        final String[] parts = s.split(":");
+        if (parts.length == 4) {
+            final World w = null;
+            final int x = Integer.parseInt(parts[1]);
+            final int y = Integer.parseInt(parts[2]);
+            final int z = Integer.parseInt(parts[3]);
+            return new Location(w, x, y, z);
+        }
+        return null;
+    }
+
+    public String getPlate() {
+        return plate;
     }
 }

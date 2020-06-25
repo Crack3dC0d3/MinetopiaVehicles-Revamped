@@ -5,10 +5,7 @@ import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.enums.VehicleType;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Seat;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Vehicle;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleManager;
-import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.InputManager;
-import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.Methods;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.enums.Messages;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -115,7 +112,7 @@ public class VehicleMover {
             if (space) {
                 if (vehicle.getCurUpSpeed() < vehicle.getMaxUpSpeed()) {
                     if (vehicle.getCurUpSpeed() < 0) {
-                        vehicle.setCurUpSpeed(vehicle.getCurUpSpeed() + (vehicle.getUpSpeed() + 0.1D));
+                        vehicle.setCurUpSpeed(vehicle.getUpSpeed());
                     } else {
                         vehicle.setCurUpSpeed(vehicle.getCurUpSpeed() + vehicle.getUpSpeed());
                     }
@@ -124,15 +121,18 @@ public class VehicleMover {
                 }
             }
             if(!space && !vehicle.getMainStand().isOnGround()) {
-                if (vehicle.getCurUpSpeed() - 0.05D < -(vehicle.getMaxUpSpeed())) {
-                    vehicle.setCurUpSpeed(-(vehicle.getMaxUpSpeed()));
+                if(vehicle.getCurUpSpeed() > 0) {
+                    vehicle.setCurUpSpeed(0);
                 }
-                if(vehicle.getCurUpSpeed() > -0.45D) {
-                    vehicle.setCurUpSpeed(vehicle.getCurUpSpeed() - 0.005);
+                if (vehicle.getCurUpSpeed() - vehicle.getDownSpeed() < -(vehicle.getMaxDownSpeed())) {
+                    vehicle.setCurUpSpeed(-(vehicle.getMaxDownSpeed()));
+                }
+                if(vehicle.getCurUpSpeed() > -(vehicle.getMaxDownSpeed())) {
+                    vehicle.setCurUpSpeed(vehicle.getCurUpSpeed() - vehicle.getDownSpeed());
                 }
 
             }
-            if(vehicle.getMainStand().isOnGround()) {
+            if(vehicle.getMainStand().isOnGround() && !space) {
                 vehicle.setCurUpSpeed(0);
             }
         }
@@ -185,13 +185,14 @@ public class VehicleMover {
         vehicle.getMainStand().setVelocity((main.add(toAdd)));
         if(vehicle.getMainStand().getLocation().getY() >= Main.getInstance().getSettings().getConfig().getInt("max-helicopter-height")) {
             Location toLoc = new Location(vehicle.getMainStand().getLocation().getWorld(), vehicle.getMainStand().getLocation().getX(), Main.getInstance().getSettings().getConfig().getInt("max-helicopter-height") - 2, vehicle.getMainStand().getLocation().getZ());
-            vehicle.setUpSpeed(0);
+            vehicle.setCurUpSpeed(0);
             Methods.setPosition(vehicle.getMainStand(), toLoc);
             Messages.send(p, Messages.MAX_HELICOPTER_HEIGHT);
         }
         if(vehicle.getType() == VehicleType.CAR) {
             vehicle.setCurUpSpeed(0);
         }
+        //Bukkit.broadcastMessage("CurUpSpeed: "+ vehicle.getCurUpSpeed() + " UpSpeed: " + vehicle.getUpSpeed() + " MaxUpSpeed: " + vehicle.getMaxUpSpeed() + " Velocity: " + vehicle.getMainStand().getVelocity().toString());
         vehicle.updatePositions();
     }
 

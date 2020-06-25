@@ -1,7 +1,6 @@
 package me.crack3dc0d3.minetopiavehiclesrevamp.main.commands;
 
 import com.google.common.collect.Lists;
-import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Vehicle;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleBase;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleManager;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.enums.Messages;
@@ -38,11 +37,10 @@ public class SubCommandList implements ISubCommand {
         try {
             page = Integer.parseInt(args[0]);
         }catch (NumberFormatException | ArrayIndexOutOfBoundsException exception) {
-            Messages.send(sender, Messages.INVALID_ARGUMENTS, getUsage());
+            Messages.send(sender, Messages.INVALID_ARGUMENTS, "/" + getUsage());
             return;
         }
-        List<List<VehicleBase>> pages = Lists.partition(VehicleManager.getBaseVehicles(), 5);
-
+        List<List<VehicleBase>> pages = Lists.partition(VehicleManager.getBaseVehicles(), 8);
         StringBuilder builder = new StringBuilder();
         builder.append("&2------[Vehicle List]------\n");
         for (VehicleBase base : pages.get(page - 1)) {

@@ -2,14 +2,11 @@ package me.crack3dc0d3.minetopiavehiclesrevamp.main.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.internal.GsonBuildConfig;
-import com.sun.xml.internal.ws.api.server.InstanceResolverAnnotation;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.Main;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Seat;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Vehicle;
-import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -60,7 +57,6 @@ public class SQLiteDataSource implements IDataSource {
                 }
                 vehicles.add(v);
             }
-            VehicleManager.addVehicle(vehicles);
             return vehicles;
 
         } catch (SQLException exception) {

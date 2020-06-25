@@ -2,8 +2,8 @@ package me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle;
 
 import com.google.gson.annotations.Expose;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.Main;
-import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.ItemFactory;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.enums.VehicleType;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.ItemFactory;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.Methods;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -37,25 +37,27 @@ public class Vehicle {
     private double baseSpeed;
     @Expose
     private List<UUID> members, riders;
-    @Expose
     private ItemStack skinItem;
     @Expose
     private VehicleType type;
+    @Expose
     private double upSpeed, downSpeed;
     @Expose
-    private double maxUpSpeed;
+    private double maxUpSpeed, maxDownSpeed;
     @Expose
     private boolean spawned;
     @Expose
     private UUID owneruuid;
     private OfflinePlayer owner;
 
-    public Vehicle(VehicleBase base, String licensePlate) {
+    public Vehicle(VehicleBase base, String licensePlate, OfflinePlayer owner) {
         this.traction = base.getTraction();
         this.licensePlate = licensePlate;
         this.baseSpeed = base.getBaseSpeed();
         this.name = base.getName();
         this.skinItem = base.getSkinItem();
+        this.owner = owner;
+        owneruuid = owner.getUniqueId();
 
         List<Seat> seatList = new ArrayList<>();
         seatList.add(new Seat(this, base.getMainSeatOffset(), true));
@@ -68,7 +70,17 @@ public class Vehicle {
         riders = new ArrayList<>();
         members = new ArrayList<>();
         this.type = base.getType();
+
+        if(base.getType() == VehicleType.HELICOPTER) {
+            maxUpSpeed = base.getMaxUpSpeed();
+            upSpeed = base.getUpSpeed();
+            maxDownSpeed = base.getMaxDownSpeed();
+            downSpeed = base.getDownSpeed();
+        }
+
+        spawned = false;
         VehicleManager.addVehicle(this);
+        Main.getDatabaseUtil().saveVehicle(this);
     }
 
     public void spawn(Location spawnLoc) {
@@ -135,7 +147,10 @@ public class Vehicle {
 
     public void despawn(Player player) {
         mainStand.remove();
+        ItemStack skin = skinStand.getHelmet();
         skinStand.remove();
+        setCurSpeed(0);
+        setCurUpSpeed(0);
         if(type == VehicleType.HELICOPTER) {
             wiekStand.remove();
         }
@@ -144,6 +159,7 @@ public class Vehicle {
         }
         spawned = false;
         Main.getDatabaseUtil().saveVehicle(this);
+        player.getInventory().addItem(skin);
     }
 
     public String getName() {
@@ -186,12 +202,18 @@ public class Vehicle {
         return licensePlate;
     }
 
-    public int getId() {
-        return id;
+    public void setOwner(OfflinePlayer owner) {
+        this.owner = owner;
+        this.owneruuid = owner.getUniqueId();
+        Main.getDatabaseUtil().saveVehicle(this);
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setSkinItem(ItemStack skinItem) {
+        this.skinItem = skinItem;
+    }
+
+    public double getMaxDownSpeed() {
+        return maxDownSpeed;
     }
 
     public Seat getMainSeat() {
@@ -212,12 +234,24 @@ public class Vehicle {
         return mainStand;
     }
 
-    public void addRider(Player rider) {
+    public void addRider(OfflinePlayer rider) {
         riders.add(rider.getUniqueId());
+        Main.getDatabaseUtil().saveVehicle(this);
     }
 
-    public void addMember(Player member) {
+    public void addMember(OfflinePlayer member) {
         members.add(member.getUniqueId());
+        Main.getDatabaseUtil().saveVehicle(this);
+    }
+
+    public void removeRider(OfflinePlayer rider) {
+        riders.remove(rider.getUniqueId());
+        Main.getDatabaseUtil().saveVehicle(this);
+    }
+
+    public void removeMember(OfflinePlayer member) {
+        members.remove(member.getUniqueId());
+        Main.getDatabaseUtil().saveVehicle(this);
     }
 
     public List<UUID> getMembers() {
@@ -264,6 +298,18 @@ public class Vehicle {
         return downSpeed;
     }
 
+    public void setMainStand(ArmorStand mainStand) {
+        this.mainStand = mainStand;
+    }
+
+    public void setSkinStand(ArmorStand skinStand) {
+        this.skinStand = skinStand;
+    }
+
+    public void setWiekStand(ArmorStand wiekStand) {
+        this.wiekStand = wiekStand;
+    }
+
     public boolean isSpawned() {
         return spawned;
     }
@@ -298,12 +344,12 @@ public class Vehicle {
         for (Seat seat: seats
              ) {
             Location locvp = mainStand.getLocation().clone();
-            Location fbvp = locvp.add(locvp.getDirection().setY(0).normalize().multiply(seat.getOffset().getX()));
-            float zvp = (float) (fbvp.getZ() + (seat.getOffset().getZ() * Math.sin(Math.toRadians(fbvp.getYaw()))));
-            float xvp = (float) (fbvp.getX() + (seat.getOffset().getZ() * Math.cos(Math.toRadians(fbvp.getYaw()))));
+            Location fbvp = locvp.add(locvp.getDirection().setY(0).normalize().multiply(seat.getOffsetLoc().getX()));
+            float zvp = (float) (fbvp.getZ() + (seat.getOffsetLoc().getZ() * Math.sin(Math.toRadians(fbvp.getYaw()))));
+            float xvp = (float) (fbvp.getX() + (seat.getOffsetLoc().getZ() * Math.cos(Math.toRadians(fbvp.getYaw()))));
             Location loc = new Location(seat.getMainVehicle().getMainStand().getWorld(),
                     xvp,
-                    mainStand.getLocation().getY() + seat.getOffset().getY(),
+                    mainStand.getLocation().getY() + seat.getOffsetLoc().getY(),
                     zvp,
                     fbvp.getYaw(),
                     fbvp.getPitch());

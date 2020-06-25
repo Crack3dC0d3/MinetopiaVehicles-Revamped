@@ -1,5 +1,6 @@
 package me.crack3dc0d3.minetopiavehiclesrevamp.main.commands;
 
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Vehicle;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleBase;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleManager;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.Methods;
@@ -53,12 +54,16 @@ public class SubCommandGive implements ISubCommand {
             Messages.send(sender, Messages.VEHICLE_DOESNT_EXIST, args[1]);
             return;
         }
+        String plate = Methods.generateLicencePlate();
+        Vehicle vehicleObj = new Vehicle(vehicle, plate, offlineTarget);
         Player target = offlineTarget.getPlayer();
         ItemStack toGive = vehicle.getSkinItem();
         ItemMeta im = toGive.getItemMeta();
         im.setDisplayName(vehicle.getDisplayname());
-        im.setLore(Arrays.asList(" ", ChatColor.COLOR_CHAR + "a" + Methods.generateLicencePlate()));
+        im.setLore(Arrays.asList(" ", ChatColor.COLOR_CHAR + "a" + plate));
         toGive.setItemMeta(im);
         target.getInventory().addItem(toGive);
+        vehicleObj.setSkinItem(toGive);
+
     }
 }

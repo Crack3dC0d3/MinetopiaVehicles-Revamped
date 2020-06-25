@@ -17,7 +17,7 @@ public class VehicleBase {
     private String name, displayname;
 
     private int baseSpeed;
-    private double traction;
+    private double traction, upSpeed, maxUpSpeed, downSpeed, maxDownSpeed;
 
     private ItemStack skinItem;
 
@@ -30,6 +30,20 @@ public class VehicleBase {
         this.displayname = displayname;
         this.baseSpeed = baseSpeed;
         this.traction = traction;
+        this.skinItem = skinItem;
+        this.type = type;
+    }
+    public VehicleBase(Location mainSeatOffset, Location[] seatOffsets, String name, String displayname, int baseSpeed, double traction, double maxUpSpeed, double upSpeed, double maxDownSpeed, double downSpeed, ItemStack skinItem, VehicleType type) {
+        this.mainSeatOffset = mainSeatOffset;
+        this.seatOffsets = seatOffsets;
+        this.name = name;
+        this.displayname = displayname;
+        this.baseSpeed = baseSpeed;
+        this.traction = traction;
+        this.maxUpSpeed = maxUpSpeed;
+        this.upSpeed = upSpeed;
+        this.maxDownSpeed = maxDownSpeed;
+        this.downSpeed = downSpeed;
         this.skinItem = skinItem;
         this.type = type;
     }
@@ -66,6 +80,22 @@ public class VehicleBase {
         return type;
     }
 
+    public double getUpSpeed() {
+        return upSpeed;
+    }
+
+    public double getMaxUpSpeed() {
+        return maxUpSpeed;
+    }
+
+    public double getDownSpeed() {
+        return downSpeed;
+    }
+
+    public double getMaxDownSpeed() {
+        return maxDownSpeed;
+    }
+
     public static VehicleBase fromYML(FileConfiguration config) {
         List<Location> seatOffsets = new ArrayList<>();
         Location mainSeatOffset = null;
@@ -83,6 +113,10 @@ public class VehicleBase {
                 config.getString("displayname"),
                 config.getInt("baseSpeed"),
                 config.getDouble("traction"),
+                config.getDouble("maxUpSpeed"),
+                config.getDouble("upSpeed"),
+                config.getDouble("maxDownSpeed"),
+                config.getDouble("downSpeed"),
                 config.getItemStack("skin"),
                 VehicleType.valueOf(config.getString("type")));
     }

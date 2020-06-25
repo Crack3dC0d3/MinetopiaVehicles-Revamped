@@ -3,19 +3,24 @@ package me.crack3dc0d3.minetopiavehiclesrevamp.main;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import me.crack3dc0d3.minetopiavehiclesrevamp.api.NMS;
-import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.Config;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Seat;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Vehicle;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleBase;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleManager;
-import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.IDataSource;
-import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.SQLiteDataSource;
-import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.RegistryHandler;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.*;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.enums.Messages;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
 
 public final class Main extends JavaPlugin {
 
@@ -29,11 +34,32 @@ public final class Main extends JavaPlugin {
 
     private static ProtocolManager protocolManager;
 
+    private String version = "0.0.1-BETA";
+
 
     @Override
     public void onEnable() {
 
         instance = this;
+
+        // Updat3r
+
+        Updat3r updat3r = Updat3r.getInstance();
+        Updat3r.Update update = updat3r.getLatestUpdate("mtvehicles-opensource", "qq8lwF7kREzIYLZs3p38GNXUaccvBQ2c");
+        if(update != null) {
+            if(!update.getVersion().equals(version)) {
+                if(update.isCritical()) {
+                    this.getLogger().log(Level.SEVERE, "A Critical update has been found. Server will restart now!");
+                    updat3r.downloadLatest(update.getDownloadLink(), "mtvehicles-opensource", this);
+                    Bukkit.shutdown();
+                    return;
+                }
+                updat3r.downloadLatest(update.getDownloadLink(), "mtvehicles-opensource", this);
+                getLogger().log(Level.INFO, "An update has been found and downloaded. Restart your server to apply!");
+            }
+        }
+
+
         loadFiles();
 
         protocolManager = ProtocolLibrary.getProtocolManager();
@@ -49,14 +75,70 @@ public final class Main extends JavaPlugin {
             e.printStackTrace();
         }
         RegistryHandler.register(this);
+        for (Vehicle v : VehicleManager.getVehicles()) {
+            int seatCount = 1;
+            if(v.isSpawned()) {
+                for (World w : Bukkit.getWorlds()) {
+                    for (Entity entity : w.getEntities()) {
+                        if(entity instanceof ArmorStand) {
+                            if(entity.getCustomName() != null) {
+                                String[] strings  = entity.getCustomName().split("_");
+                                if(strings[2].equals(v.getLicensePlate())) {
+                                    switch (strings[1]) {
+                                        case "SKIN":
+                                            v.setSkinStand((ArmorStand) entity);
+                                            break;
+                                        case "VEHICLE":
+                                            v.setMainStand((ArmorStand) entity);
+                                            break;
+                                        case "WIEKEN":
+                                            v.setWiekStand((ArmorStand) entity);
+                                            break;
+                                        case "MAINSEAT":
+                                            v.getMainSeat().setSeat((ArmorStand) entity);
+                                            v.getMainSeat().setMainVehicle(v);
+                                            Seat.addSeat(v.getMainSeat());
+                                            v.getMainSeat().updateOffset();
+                                            break;
+                                        case "SEAT":
+                                            v.getSeats()[seatCount].setMainVehicle(v);
+                                            v.getSeats()[seatCount].setSeat((ArmorStand) entity);
+                                            v.getSeats()[seatCount].updateOffset();
+                                            Seat.addSeat(v.getSeats()[seatCount]);
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        for (Vehicle v :VehicleManager.getVehicles()) {
+            databaseUtil.saveVehicle(v);
+        }
     }
 
-
+//    private int vehicleCount = 0;
+//    @Override
+//    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+//        if(command.getName().equals("givevehicleitems")) {
+//            for (int i = 0; i < 27 ; i++) {
+//                ItemStack vehicle = new ItemStack(Material.DIAMOND_HOE, 1, (short)(1003 + vehicleCount));
+//                ItemMeta meta = vehicle.getItemMeta();
+//                meta.setDisplayName(String.valueOf(1003+vehicleCount));
+//                meta.setUnbreakable(true);
+//                vehicle.setItemMeta(meta);
+//                ((Player) sender).getInventory().addItem(vehicle);
+//                vehicleCount++;
+//            }
+//        }
+//        return true;
+//    }
 
     private void loadNMS() {
         String packageName = this.getServer().getClass().getPackage().getName();
@@ -93,6 +175,15 @@ public final class Main extends JavaPlugin {
             }
         }
         VehicleManager.addVehicle(databaseUtil.getVehicles());
+        for (Vehicle v : VehicleManager.getVehicles()
+             ) {
+            for (Seat s : v.getSeats()
+                 ) {
+                s.setMainVehicle(v);
+                s.updateOffset();
+                Seat.addSeat(s);
+            }
+        }
     }
 
     private void loadFiles() {
