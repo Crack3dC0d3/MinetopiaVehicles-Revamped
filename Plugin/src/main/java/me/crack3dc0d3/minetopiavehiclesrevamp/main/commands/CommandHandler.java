@@ -38,7 +38,7 @@ public class CommandHandler implements CommandExecutor {
         for (ISubCommand subCommand : commands) {
             if (!subCommand.getName().equalsIgnoreCase(args[0])) continue;
             if(subCommand.getPermission() == null || sender.hasPermission(subCommand.getPermission())) {
-                subCommand.execute(sender, command, Arrays.stream(args).skip(1).toArray(String[]::new));
+                subCommand.execute(sender, command, Arrays.copyOfRange(args, 1, args.length));
             } else Messages.send(sender, Messages.NO_PERMISSION);
             break;
         }
