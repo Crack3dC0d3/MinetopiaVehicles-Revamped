@@ -4,6 +4,7 @@ import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.enums.VehicleType;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class VehicleBase {
         this.skinItem = skinItem;
         this.type = type;
     }
+    
     public VehicleBase(Location mainSeatOffset, Location[] seatOffsets, String name, String displayname, int baseSpeed, double traction, double maxUpSpeed, double upSpeed, double maxDownSpeed, double downSpeed, ItemStack skinItem, VehicleType type) {
         this.mainSeatOffset = mainSeatOffset;
         this.seatOffsets = seatOffsets;
@@ -96,7 +98,8 @@ public class VehicleBase {
         return maxDownSpeed;
     }
 
-    public static VehicleBase fromYML(FileConfiguration config) {
+    @NotNull
+    public static VehicleBase fromYML(@NotNull FileConfiguration config) {
         List<Location> seatOffsets = new ArrayList<>();
         Location mainSeatOffset = null;
         for(String s : config.getConfigurationSection("seatOffsets").getKeys(false)) {

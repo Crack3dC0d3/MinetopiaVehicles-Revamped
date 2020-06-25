@@ -14,6 +14,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class Vehicle {
     private String licensePlate, name;
     private Seat mainSeat;
     private ArmorStand mainStand;
-    private ArmorStand skinStand, wiekStand;
+    private ArmorStand skinStand, bladeStand;
     private double curSpeed = 0;
     private double curUpSpeed = 0;
     @Expose
@@ -50,7 +51,7 @@ public class Vehicle {
     private UUID owneruuid;
     private OfflinePlayer owner;
 
-    public Vehicle(VehicleBase base, String licensePlate, OfflinePlayer owner) {
+    public Vehicle(@NotNull VehicleBase base, String licensePlate, @NotNull OfflinePlayer owner) {
         this.traction = base.getTraction();
         this.licensePlate = licensePlate;
         this.baseSpeed = base.getBaseSpeed();
@@ -116,11 +117,11 @@ public class Vehicle {
         skinStand.setCustomNameVisible(true);
 
         if(type == VehicleType.HELICOPTER) {
-            this.wiekStand = mainStand.getWorld().spawn(mainStand.getLocation().add(0, -0.15, -0.8), ArmorStand.class);
-            wiekStand.setGravity(false);
-            wiekStand.setVisible(false);
-            wiekStand.setCustomName("MINETOPIAVEHICLES_WIEKEN_" + licensePlate);
-            wiekStand.setCustomNameVisible(true);
+            this.bladeStand = mainStand.getWorld().spawn(mainStand.getLocation().add(0, -0.15, -0.8), ArmorStand.class);
+            bladeStand.setGravity(false);
+            bladeStand.setVisible(false);
+            bladeStand.setCustomName("MINETOPIAVEHICLES_WIEKEN_" + licensePlate);
+            bladeStand.setCustomNameVisible(true);
 
 
 
@@ -137,9 +138,9 @@ public class Vehicle {
                             zvp,
                             fbvp.getYaw(),
                             fbvp.getPitch());
-                    loc.setYaw(wiekStand.getLocation().getYaw() + 10F);
+                    loc.setYaw(bladeStand.getLocation().getYaw() + 10F);
 
-                    Methods.setPosition(wiekStand, loc);
+                    Methods.setPosition(bladeStand, loc);
                 }
             }.runTaskTimer(Main.getInstance(), 0L, 1L);
 
@@ -155,7 +156,7 @@ public class Vehicle {
         setCurSpeed(0);
         setCurUpSpeed(0);
         if(type == VehicleType.HELICOPTER) {
-            wiekStand.remove();
+            bladeStand.remove();
         }
         for(Seat s : seats) {
             s.getSeatStand().remove();
@@ -309,8 +310,8 @@ public class Vehicle {
         this.skinStand = skinStand;
     }
 
-    public void setWiekStand(ArmorStand wiekStand) {
-        this.wiekStand = wiekStand;
+    public void setWiekStand(ArmorStand bladeStand) {
+        this.bladeStand = bladeStand;
     }
 
     public boolean isSpawned() {
@@ -335,7 +336,7 @@ public class Vehicle {
             s.getSeatStand().remove();
         }
         if(type == VehicleType.HELICOPTER) {
-            wiekStand.remove();
+            bladeStand.remove();
         }
         VehicleManager.removeVehicle(this);
     }
@@ -372,8 +373,8 @@ public class Vehicle {
                     fbvp.getYaw(),
                     fbvp.getPitch());
 
-            locnew.setYaw(wiekStand.getLocation().getYaw());
-            Methods.setPosition(wiekStand, locnew);
+            locnew.setYaw(bladeStand.getLocation().getYaw());
+            Methods.setPosition(bladeStand, locnew);
         }
     }
 
@@ -392,15 +393,13 @@ public class Vehicle {
 //            } else {
 //                wiekStand.setHelmet(new ItemFactory(Material.DIAMOND_HOE).setDurability((short) 1058).unbreakable().toItemStack());
 //            }
-            wiekStand.setHelmet(new ItemFactory(Material.DIAMOND_HOE).setDurability((short) 1058).unbreakable().toItemStack());
+            bladeStand.setHelmet(new ItemFactory(Material.DIAMOND_HOE).setDurability((short) 1058).unbreakable().toItemStack());
         }
     }
+
     public void hideWieken() {
         if(type == VehicleType.HELICOPTER) {
-            wiekStand.setHelmet(new ItemStack(Material.AIR));
+            bladeStand.setHelmet(new ItemStack(Material.AIR));
         }
     }
-
-
-
 }
