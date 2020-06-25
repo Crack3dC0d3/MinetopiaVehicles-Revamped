@@ -43,6 +43,7 @@ public class Seat {
         stand.setCollidable(false);
         stand.setGravity(false);
         stand.setVisible(false);
+        stand.setCustomNameVisible(true);
         if(this.getMainVehicle().getMainSeat() == this) {
             stand.setCustomName("MINETOPIAVEHICLES_MAINSEAT_" + mainVehicle.getLicensePlate());
         } else {
@@ -79,6 +80,9 @@ public class Seat {
      * @return The offset from the main armorstand
      */
     public Location getOffsetLoc() {
+        if(offsetLoc == null) {
+            offsetLoc = getLocationString(offset);
+        }
         return offsetLoc;
     }
 
@@ -122,7 +126,7 @@ public class Seat {
         if (l == null) {
             return "";
         }
-        return "fietsbel:" + l.getBlockX() + ":" + l.getBlockY() + ":" + l.getBlockZ();
+        return "fietsbel:" + l.getX() + ":" + l.getY() + ":" + l.getZ();
     }
 
     public Location getLocationString(final String s) {
@@ -132,9 +136,9 @@ public class Seat {
         final String[] parts = s.split(":");
         if (parts.length == 4) {
             final World w = null;
-            final int x = Integer.parseInt(parts[1]);
-            final int y = Integer.parseInt(parts[2]);
-            final int z = Integer.parseInt(parts[3]);
+            final double x = Double.parseDouble(parts[1]);
+            final double y = Double.parseDouble(parts[2]);
+            final double z = Double.parseDouble(parts[3]);
             return new Location(w, x, y, z);
         }
         return null;

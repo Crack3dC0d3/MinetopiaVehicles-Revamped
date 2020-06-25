@@ -20,6 +20,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.logging.Level;
 
 public final class Main extends JavaPlugin {
@@ -165,6 +168,15 @@ public final class Main extends JavaPlugin {
 
     private void loadVehicles() throws IOException, InvalidConfigurationException {
         File dir = new File(getDataFolder() + File.separator + "vehicles");
+        File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+        JarFile jar = new JarFile(jarFile);
+        Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
+        while(entries.hasMoreElements()) {
+            JarEntry element = entries.nextElement();
+            if (element.getName().startsWith("vehicles/") && !element.getName().equals("vehicles/")) { //filter according to the path
+                saveResource(element.getName(), true);
+            }
+        }
         File[] directoryListing = dir.listFiles();
         if(directoryListing != null) {
             for(File f : directoryListing) {

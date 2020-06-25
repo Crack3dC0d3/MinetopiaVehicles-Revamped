@@ -1,6 +1,7 @@
 package me.crack3dc0d3.minetopiavehiclesrevamp.main.events;
 
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.Main;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.enums.VehicleType;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Seat;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.enums.Messages;
 import net.minecraft.server.v1_12_R1.DedicatedServer;
@@ -40,6 +41,9 @@ public class Dismount implements Listener {
                     s.getMainVehicle().setCurSpeed(0);
                     s.getMainVehicle().getMainStand().setVelocity(new Vector(0, 0,0));
                     ((Player) event.getEntity()).setAllowFlight(Boolean.parseBoolean((String) ((DedicatedServer) MinecraftServer.getServer()).propertyManager.properties.get("allow-flight")));
+                    if(s.getMainVehicle().getType() == VehicleType.HELICOPTER) {
+                        s.getMainVehicle().hideWieken();
+                    }
                 }
             }
         }

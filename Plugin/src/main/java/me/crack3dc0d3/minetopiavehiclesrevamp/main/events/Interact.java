@@ -1,5 +1,6 @@
 package me.crack3dc0d3.minetopiavehiclesrevamp.main.events;
 
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.enums.VehicleType;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Seat;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Vehicle;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleManager;
@@ -81,6 +82,9 @@ public class Interact implements Listener {
                 if(v.getOwner() == event.getPlayer() || v.getRiders().contains(event.getPlayer().getUniqueId()) || event.getPlayer().hasPermission("minetopiavehicles.staff.overrideowner")) {
                     s.getSeatStand().addPassenger(event.getPlayer());
                     event.getPlayer().setAllowFlight(true);
+                    if(v.getType() == VehicleType.HELICOPTER) {
+                        v.showWieken();
+                    }
                 } else {
                     Messages.send(event.getPlayer(), Messages.NO_PERMISSION);
                 }

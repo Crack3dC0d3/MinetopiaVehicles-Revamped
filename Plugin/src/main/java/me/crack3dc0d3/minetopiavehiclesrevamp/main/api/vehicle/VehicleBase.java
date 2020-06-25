@@ -101,10 +101,10 @@ public class VehicleBase {
         Location mainSeatOffset = null;
         for(String s : config.getConfigurationSection("seatOffsets").getKeys(false)) {
             if(s.equals(config.getString("mainSeat"))) {
-                mainSeatOffset = new Location(null, config.getInt("seatOffsets." + s + ".x"), config.getInt("seatOffsets." + s + ".y"), config.getInt("seatOffsets." + s + ".z"));
+                mainSeatOffset = new Location(null, config.getDouble("seatOffsets." + s + ".x"), config.getDouble("seatOffsets." + s + ".y"), config.getDouble("seatOffsets." + s + ".z"));
                 continue;
             }
-            seatOffsets.add(new Location(null, config.getInt("seatOffsets." + s + ".x"), config.getInt("seatOffsets." + s + ".y"), config.getInt("seatOffsets." + s + ".z")));
+            seatOffsets.add(new Location(null, config.getDouble("seatOffsets." + s + ".x"), config.getDouble("seatOffsets." + s + ".y"), config.getDouble("seatOffsets." + s + ".z")));
         }
         return new VehicleBase(
                 mainSeatOffset,
