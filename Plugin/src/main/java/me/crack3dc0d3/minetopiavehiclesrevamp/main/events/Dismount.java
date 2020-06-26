@@ -4,9 +4,8 @@ import me.crack3dc0d3.minetopiavehiclesrevamp.main.Main;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.enums.VehicleType;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Seat;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.enums.Messages;
-import net.minecraft.server.v1_12_R1.DedicatedServer;
-import net.minecraft.server.v1_12_R1.MinecraftServer;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -40,7 +39,9 @@ public class Dismount implements Listener {
                     s.getMainVehicle().setCurUpSpeed(0);
                     s.getMainVehicle().setCurSpeed(0);
                     s.getMainVehicle().getMainStand().setVelocity(new Vector(0, 0,0));
-                    ((Player) event.getEntity()).setAllowFlight(Boolean.parseBoolean((String) ((DedicatedServer) MinecraftServer.getServer()).propertyManager.properties.get("allow-flight")));
+
+                    Main.getInstance().getNms().resetFlight((Player) event.getEntity());
+//                    ((Player) event.getEntity()).setAllowFlight(Boolean.parseBoolean((String) ((DedicatedServer) MinecraftServer.getServer()).propertyManager.properties.get("allow-flight")));
                     if(s.getMainVehicle().getType() == VehicleType.HELICOPTER) {
                         s.getMainVehicle().hideWieken();
                     }
@@ -54,7 +55,7 @@ public class Dismount implements Listener {
         int distance = 0;
         for (double i = y; i >= 0; i--) {
             loc.setY(i);
-            if (loc.getBlock().getType().isSolid()) break;
+            if (loc.getBlock().getType() != Material.AIR) break;
             distance++;
         }
         return distance;

@@ -1,5 +1,5 @@
 name: Minetopiavehicles-Revamp
-version: ${project.version}
+version: 0.0.1c-BETA
 main: me.crack3dc0d3.minetopiavehiclesrevamp.main.Main
 api-version: 1.13
 authors: [Crack3dC0d3]
