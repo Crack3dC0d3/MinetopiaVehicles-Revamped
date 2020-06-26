@@ -13,7 +13,6 @@ public class LevelCheck implements Listener {
     public void onLevelCheck(PlayerLevelcheckEvent event) {
         if(Main.getSettings().getConfig().getBoolean("enable-levelcheck-vehicles")) {
             int vehicles = 0;
-
             for (Vehicle v : VehicleManager.getVehicles()) {
                 if(v.getOwner().getUniqueId() == event.getPlayer().getUniqueId()) {
                     vehicles++;
