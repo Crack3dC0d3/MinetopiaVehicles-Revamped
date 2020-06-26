@@ -10,3 +10,5 @@ commands:
   minetopiavehicles:
     usage: /<command>
     aliases: [vehicle, mtv, mtvehicles]
+#  givevehicleitems:
+#    usage: /<command>

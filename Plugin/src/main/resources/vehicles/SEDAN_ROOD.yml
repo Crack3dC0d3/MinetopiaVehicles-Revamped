@@ -1,0 +1,32 @@
+# Naam van het voertuig. Moet uniek zijn. Word gebrukt als identificatie voor commands etc
+name: SEDAN_ROOD
+# Naam dat spelers ingame zien.
+displayname: §6Sedan Rood
+# Hoe snel het voertuig op zijn maximum gaat
+baseSpeed: 40
+# Hoeveel snelheid er per tick bijopgeteld word.
+traction: 0.02
+# De bestuurderstoel. Moet bestaan in seatOffsets
+mainSeat: "seat1"
+# Offset van de stoel vanaf de armorstand van het voertuig
+seatOffsets:
+  seat1:
+    x: -0.1
+    y: -0.9
+    z: 0
+  seat2:
+    x: -1
+    y: -1
+    z: 0
+# Het type voertuig. CAR voor een auto/motor. HELICOPTER voor een helikopter.
+type: CAR
+# Item van het voertuig. Link voor documentatie: https://www.spigotmc.org/wiki/itemstack-serialization/
+skin:
+  ==: org.bukkit.inventory.ItemStack
+  damage: 1017
+  meta:
+    ==: ItemMeta
+    meta-type: UNSPECIFIC
+    Damage: 1041
+    Unbreakable: true
+  type: DIAMOND_HOE

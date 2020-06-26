@@ -1,16 +1,20 @@
 package me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle;
 
+import com.google.gson.annotations.Expose;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.Main;
-import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.ItemFactory;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.enums.VehicleType;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.ItemFactory;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.Methods;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,45 +22,69 @@ import java.util.UUID;
 
 public class Vehicle {
 
+    private int id;
+    @Expose
     private Seat[] seats;
+    @Expose
     private String licensePlate, name;
     private Seat mainSeat;
     private ArmorStand mainStand;
-    private ArmorStand skinStand, wiekStand;
+    private ArmorStand skinStand, bladeStand;
     private double curSpeed = 0;
     private double curUpSpeed = 0;
+    @Expose
     private double traction;
+    @Expose
     private double baseSpeed;
+    @Expose
     private List<UUID> members, riders;
     private ItemStack skinItem;
+    @Expose
     private VehicleType type;
-    private double upSpeed, downSpeed, maxUpSpeed;
+    @Expose
+    private double upSpeed, downSpeed;
+    @Expose
+    private double maxUpSpeed, maxDownSpeed;
+    @Expose
     private boolean spawned;
+    @Expose
+    private UUID owneruuid;
+    private OfflinePlayer owner;
 
-    public Vehicle(VehicleBase base, String licensePlate) {
+    public Vehicle(@NotNull VehicleBase base, String licensePlate, @NotNull OfflinePlayer owner) {
         this.traction = base.getTraction();
         this.licensePlate = licensePlate;
         this.baseSpeed = base.getBaseSpeed();
         this.name = base.getName();
         this.skinItem = base.getSkinItem();
+        this.owner = owner;
+        owneruuid = owner.getUniqueId();
 
         List<Seat> seatList = new ArrayList<>();
+        seatList.add(new Seat(this, base.getMainSeatOffset(), true));
         for (Location seatOffset: base.getSeatOffsets()
              ) {
-            Seat s = new Seat(this, seatOffset);
-            seatList.add(s);
+            seatList.add(new Seat(this, seatOffset, false));
         }
         this.seats = seatList.toArray(new Seat[0]);
-        this.mainSeat = seats[0];
 
         riders = new ArrayList<>();
         members = new ArrayList<>();
         this.type = base.getType();
+
+        if(base.getType() == VehicleType.HELICOPTER) {
+            maxUpSpeed = base.getMaxUpSpeed();
+            upSpeed = base.getUpSpeed();
+            maxDownSpeed = base.getMaxDownSpeed();
+            downSpeed = base.getDownSpeed();
+        }
+
+        spawned = false;
         VehicleManager.addVehicle(this);
+        Main.getDatabaseUtil().saveVehicle(this);
     }
 
     public void spawn(Location spawnLoc) {
-        spawned = true;
         Location ploc = spawnLoc.add(0, 1, 0);
         ArmorStand vehicle = (ArmorStand) ploc.getWorld().spawn(ploc, ArmorStand.class);
         //vehicle.setVisible(false);
@@ -66,6 +94,7 @@ public class Vehicle {
         vehicle.setCollidable(false);
         vehicle.setGravity(true);
         vehicle.setVisible(false);
+        vehicle.setCustomNameVisible(true);
 
         this.mainStand = vehicle;
 
@@ -85,12 +114,14 @@ public class Vehicle {
         skinStand.setInvulnerable(true);
         skinStand.setCustomName("MINETOPIAVEHICLES_SKIN_" + licensePlate);
         skinStand.setGravity(false);
+        skinStand.setCustomNameVisible(true);
 
         if(type == VehicleType.HELICOPTER) {
-            this.wiekStand = mainStand.getWorld().spawn(mainStand.getLocation().add(0, -0.15, -0.8), ArmorStand.class);
-            wiekStand.setGravity(false);
-            wiekStand.setVisible(false);
-            wiekStand.setCustomName("MINETOPIAVEHICLES_WIEKEN_" + licensePlate);
+            this.bladeStand = mainStand.getWorld().spawn(mainStand.getLocation().add(0, -0.15, -0.8), ArmorStand.class);
+            bladeStand.setGravity(false);
+            bladeStand.setVisible(false);
+            bladeStand.setCustomName("MINETOPIAVEHICLES_WIEKEN_" + licensePlate);
+            bladeStand.setCustomNameVisible(true);
 
 
 
@@ -107,30 +138,32 @@ public class Vehicle {
                             zvp,
                             fbvp.getYaw(),
                             fbvp.getPitch());
-                    loc.setYaw(wiekStand.getLocation().getYaw() + 10F);
+                    loc.setYaw(bladeStand.getLocation().getYaw() + 10F);
 
-                    Methods.setPosition(wiekStand, loc);
+                    Methods.setPosition(bladeStand, loc);
                 }
             }.runTaskTimer(Main.getInstance(), 0L, 1L);
 
         }
-
+        Main.getDatabaseUtil().saveVehicle(this);
         spawned = true;
     }
 
     public void despawn(Player player) {
-
-
-
         mainStand.remove();
+        ItemStack skin = skinStand.getHelmet();
         skinStand.remove();
+        setCurSpeed(0);
+        setCurUpSpeed(0);
         if(type == VehicleType.HELICOPTER) {
-            wiekStand.remove();
+            bladeStand.remove();
         }
         for(Seat s : seats) {
             s.getSeatStand().remove();
         }
         spawned = false;
+        Main.getDatabaseUtil().saveVehicle(this);
+        player.getInventory().addItem(skin);
     }
 
     public String getName() {
@@ -173,7 +206,31 @@ public class Vehicle {
         return licensePlate;
     }
 
+    public void setOwner(OfflinePlayer owner) {
+        this.owner = owner;
+        this.owneruuid = owner.getUniqueId();
+        Main.getDatabaseUtil().saveVehicle(this);
+    }
+
+    public void setSkinItem(ItemStack skinItem) {
+        this.skinItem = skinItem;
+    }
+
+    public double getMaxDownSpeed() {
+        return maxDownSpeed;
+    }
+
     public Seat getMainSeat() {
+
+        if(mainSeat == null) {
+            for (Seat s: seats
+                 ) {
+                if(s.isMain()) {
+                    mainSeat = s;
+                    break;
+                }
+            }
+        }
         return mainSeat;
     }
 
@@ -181,12 +238,24 @@ public class Vehicle {
         return mainStand;
     }
 
-    public void addRider(Player rider) {
+    public void addRider(OfflinePlayer rider) {
         riders.add(rider.getUniqueId());
+        Main.getDatabaseUtil().saveVehicle(this);
     }
 
-    public void addMember(Player member) {
+    public void addMember(OfflinePlayer member) {
         members.add(member.getUniqueId());
+        Main.getDatabaseUtil().saveVehicle(this);
+    }
+
+    public void removeRider(OfflinePlayer rider) {
+        riders.remove(rider.getUniqueId());
+        Main.getDatabaseUtil().saveVehicle(this);
+    }
+
+    public void removeMember(OfflinePlayer member) {
+        members.remove(member.getUniqueId());
+        Main.getDatabaseUtil().saveVehicle(this);
     }
 
     public List<UUID> getMembers() {
@@ -233,6 +302,28 @@ public class Vehicle {
         return downSpeed;
     }
 
+    public void setMainStand(ArmorStand mainStand) {
+        this.mainStand = mainStand;
+    }
+
+    public void setSkinStand(ArmorStand skinStand) {
+        this.skinStand = skinStand;
+    }
+
+    public void setWiekStand(ArmorStand bladeStand) {
+        this.bladeStand = bladeStand;
+    }
+
+    public boolean isSpawned() {
+        return spawned;
+    }
+
+    public OfflinePlayer getOwner() {
+        if(owner == null) {
+            owner = Bukkit.getOfflinePlayer(owneruuid);
+        }
+        return owner;
+    }
 
     public void removeNoTemp() {
 
@@ -245,7 +336,7 @@ public class Vehicle {
             s.getSeatStand().remove();
         }
         if(type == VehicleType.HELICOPTER) {
-            wiekStand.remove();
+            bladeStand.remove();
         }
         VehicleManager.removeVehicle(this);
     }
@@ -257,12 +348,12 @@ public class Vehicle {
         for (Seat seat: seats
              ) {
             Location locvp = mainStand.getLocation().clone();
-            Location fbvp = locvp.add(locvp.getDirection().setY(0).normalize().multiply(seat.getOffset().getX()));
-            float zvp = (float) (fbvp.getZ() + (seat.getOffset().getZ() * Math.sin(Math.toRadians(fbvp.getYaw()))));
-            float xvp = (float) (fbvp.getX() + (seat.getOffset().getZ() * Math.cos(Math.toRadians(fbvp.getYaw()))));
+            Location fbvp = locvp.add(locvp.getDirection().setY(0).normalize().multiply(seat.getOffsetLoc().getX()));
+            float zvp = (float) (fbvp.getZ() + (seat.getOffsetLoc().getZ() * Math.sin(Math.toRadians(fbvp.getYaw()))));
+            float xvp = (float) (fbvp.getX() + (seat.getOffsetLoc().getZ() * Math.cos(Math.toRadians(fbvp.getYaw()))));
             Location loc = new Location(seat.getMainVehicle().getMainStand().getWorld(),
                     xvp,
-                    mainStand.getLocation().getY() + seat.getOffset().getY(),
+                    mainStand.getLocation().getY() + seat.getOffsetLoc().getY(),
                     zvp,
                     fbvp.getYaw(),
                     fbvp.getPitch());
@@ -282,8 +373,8 @@ public class Vehicle {
                     fbvp.getYaw(),
                     fbvp.getPitch());
 
-            locnew.setYaw(wiekStand.getLocation().getYaw());
-            Methods.setPosition(wiekStand, locnew);
+            locnew.setYaw(bladeStand.getLocation().getYaw());
+            Methods.setPosition(bladeStand, locnew);
         }
     }
 
@@ -302,15 +393,13 @@ public class Vehicle {
 //            } else {
 //                wiekStand.setHelmet(new ItemFactory(Material.DIAMOND_HOE).setDurability((short) 1058).unbreakable().toItemStack());
 //            }
-            wiekStand.setHelmet(new ItemFactory(Material.DIAMOND_HOE).setDurability((short) 1058).unbreakable().toItemStack());
+            bladeStand.setHelmet(new ItemFactory(Material.DIAMOND_HOE).setDurability((short) 1058).unbreakable().toItemStack());
         }
     }
+
     public void hideWieken() {
         if(type == VehicleType.HELICOPTER) {
-            wiekStand.setHelmet(new ItemStack(Material.AIR));
+            bladeStand.setHelmet(new ItemStack(Material.AIR));
         }
     }
-
-
-
 }

@@ -1,8 +1,10 @@
 package me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle;
 
+import com.google.gson.annotations.Expose;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -11,29 +13,38 @@ import java.util.List;
 public class Seat {
 
     public static List<Seat> seats = new ArrayList<>();
-
-    private Location offset;
+    @Expose
+    private String offset;
+    private Location offsetLoc;
     private Vehicle mainVehicle;
     private ArmorStand seat;
+    @Expose
+    private boolean main;
+    @Expose
+    private String plate;
 
-    public Seat(Vehicle mainVehicle, Location offset) {
+    public Seat(@NotNull Vehicle mainVehicle, Location offset, boolean isMain) {
         this.mainVehicle = mainVehicle;
-        this.offset = offset;
+        this.offsetLoc = offset;
+        this.offset = serializeLocation(offset);
+        this.main = isMain;
+        this.plate = mainVehicle.getLicensePlate();
         seats.add(this);
     }
 
-
-
+    /**
+     * Spawns the seat and assigns the armorstand variables
+     */
     public void spawn() {
-        this.offset.setWorld(mainVehicle.getMainStand().getWorld());
-        Entity armorstand = mainVehicle.getMainStand().getWorld().spawn(mainVehicle.getMainStand().getLocation().add(offset), ArmorStand.class);
-        ArmorStand stand = (ArmorStand) armorstand;
+        this.offsetLoc.setWorld(mainVehicle.getMainStand().getWorld());
+        ArmorStand stand = mainVehicle.getMainStand().getWorld().spawn(mainVehicle.getMainStand().getLocation().add(offsetLoc), ArmorStand.class);
         //stand.setVisible(false);
         stand.setInvulnerable(true);
         stand.setCustomNameVisible(false);
         stand.setCollidable(false);
         stand.setGravity(false);
         stand.setVisible(false);
+        stand.setCustomNameVisible(true);
         if(this.getMainVehicle().getMainSeat() == this) {
             stand.setCustomName("MINETOPIAVEHICLES_MAINSEAT_" + mainVehicle.getLicensePlate());
         } else {
@@ -42,7 +53,11 @@ public class Seat {
         seat = stand;
     }
 
-
+    /**
+     * Gets a {@link Seat} object with the given armorstand. If none was fount returns null
+     * @param stand The armorstand to lookup
+     * @return Seat object, Null if none found
+     */
     @Nullable
     public static Seat getSeat(ArmorStand stand) {
         for(Seat seat : seats) {
@@ -53,15 +68,85 @@ public class Seat {
         return null;
     }
 
+    /**
+     * Gets the vehicle assigned to this seat
+     * @return The vehicle assigned to this seat
+     */
     public Vehicle getMainVehicle() {
         return mainVehicle;
     }
 
-    public Location getOffset() {
-        return offset;
+    /**
+     * Gets the offset from the main armorstand
+     * @return The offset from the main armorstand
+     */
+    public Location getOffsetLoc() {
+        if(offsetLoc == null) {
+            offsetLoc = deserializeLocation(offset);
+        }
+        return offsetLoc;
     }
 
+    /**
+     * Gets the armorstand this seat is assigned to
+     * @return The armorstand that this seat is assigned to
+     */
     public ArmorStand getSeatStand() {
         return seat;
+    }
+
+    /**
+     * Check whether the seat is the drivers seat or not
+     * @return true if its the drivers seat, False if not
+     */
+    public boolean isMain() {
+        return main;
+    }
+
+    /**
+     * Sets the main vehicle (Used for datastorage purposes)
+     * @param mainVehicle The vehicle to set the main to.
+     */
+    public void setMainVehicle(Vehicle mainVehicle) {
+        this.mainVehicle = mainVehicle;
+    }
+
+    public void setSeat(ArmorStand seat) {
+        this.seat = seat;
+    }
+
+    public static void addSeat(Seat s) {
+        seats.add(s);
+    }
+
+    public void updateOffset() {
+        offsetLoc = deserializeLocation(offset);
+    }
+
+    @NotNull
+    private String serializeLocation(final Location l) {
+        if (l == null) {
+            return "";
+        }
+        //TODO Change fietsbel to something else?
+        return "fietsbel:" + l.getX() + ":" + l.getY() + ":" + l.getZ();
+    }
+
+    private Location deserializeLocation(final String s) {
+        if (s == null || s.trim().equals("")) {
+            return null;
+        }
+        final String[] parts = s.split(":");
+        if (parts.length == 4) {
+            final double x = Double.parseDouble(parts[1]);
+            final double y = Double.parseDouble(parts[2]);
+            final double z = Double.parseDouble(parts[3]);
+            return new Location(null, x, y, z);
+        }
+        return null;
+    }
+
+    public String getPlate() {
+        return plate;
     }
 }

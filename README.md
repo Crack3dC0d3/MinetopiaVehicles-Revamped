@@ -1,4 +1,4 @@
-# Minteopia Vehicles
+# Minetopia Vehicles
 
 Dé copy van de DDG Minetopia voertuigen!
 

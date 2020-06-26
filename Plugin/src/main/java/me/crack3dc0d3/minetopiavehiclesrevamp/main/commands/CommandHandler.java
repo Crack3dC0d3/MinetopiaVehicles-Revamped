@@ -17,54 +17,41 @@ public class CommandHandler implements CommandExecutor {
     public CommandHandler() {
         commands.addAll(Arrays.asList(
                 new SubCommandHelp(),
-                new SubCommandGive()
+                new SubCommandList(),
+                new SubCommandGive(),
+                new SubCommandSetowner(),
+                new SubCommandAddDriver(),
+                new SubCommandAddMember(),
+                new SubCommandRemoveDriver(),
+                new SubCommandRemoveMember(),
+                new SubCommandInfo()
         ));
     }
 
 
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(args.length <= 0) {
-        	sender.sendMessage(colorFormat("&3---------------------------------------------"));
-        	sender.sendMessage(colorFormat("&bDeze server maakt gebruik van &3MinetopiaVehicles&b!"));
-        	sender.sendMessage(colorFormat("&bGemaakt door &3Crack3dC0d3&b!"));
-        	sender.sendMessage(colorFormat("&bVoor meer informatie bekijk de spigot page!"));
-        	sender.sendMessage(colorFormat("&3---------------------------------------------"));
+        if (args.length <= 0) {
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', 
+                   "&3---------------------------------------------\n"
+                 + "&bDeze server maakt gebruik van &3MinetopiaVehicles&b!\n"
+                 + "&bGemaakt door &3Crack3dC0d3&b!\n"
+                 + "&bVoor meer informatie bekijk de spigot page!\n"
+                 + "&3---------------------------------------------"));
             return true;
         }
 
-        String subCommand = args[0];
-        List<String> newArgsList = new ArrayList<>(Arrays.asList(args));
-        newArgsList.remove(0);
-
-            for (ISubCommand subcommand : commands
-            ) {
-                if (subcommand.getName().equalsIgnoreCase(subCommand)) {
-
-                    if(subcommand.getPermission() == null) {
-                        subcommand.execute(sender, command, newArgsList.toArray(new String[0]));
-                        return true;
-                    }
-
-                    if(sender.hasPermission(subcommand.getPermission())) {
-                        subcommand.execute(sender, command, newArgsList.toArray(new String[0]));
-                        return true;
-                    } else {
-                        Messages.send(sender, Messages.NO_PERMISSION);
-                        return true;
-                    }
-                }
-            }
+        for (ISubCommand subCommand : commands) {
+            if (!subCommand.getName().equalsIgnoreCase(args[0])) continue;
+            if(subCommand.getPermission() == null || sender.hasPermission(subCommand.getPermission())) {
+                subCommand.execute(sender, command, Arrays.copyOfRange(args, 1, args.length));
+            } else Messages.send(sender, Messages.NO_PERMISSION);
+            break;
+        }
         return true;
     }
 
     public static List<ISubCommand> getCommands() {
         return commands;
-    }
-    
-    public String colorFormat(String s){
-        return s.replace('&', ChatColor.COLOR_CHAR);
-    }
-    
+    }    
 }
