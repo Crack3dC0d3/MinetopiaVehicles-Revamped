@@ -37,6 +37,7 @@ public class Interact implements Listener {
                         v.setSkinItem(event.getItem());
                         v.spawn(event.getClickedBlock().getLocation().add(0, 0.3, 0));
                         event.getPlayer().getInventory().remove(event.getItem());
+                        event.setCancelled(true);
                     } else {
                         Messages.send(event.getPlayer(), Messages.NO_PERMISSION);
                     }
