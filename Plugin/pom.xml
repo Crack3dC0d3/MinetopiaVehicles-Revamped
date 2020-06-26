@@ -4,13 +4,13 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>minetopiavehicles-revamp-plugin</artifactId>
+    <artifactId>plugin</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
 
     <parent>
-        <groupId>me.crack3dc0d3</groupId>
-        <artifactId>minetopiavehicles-revamp-parent</artifactId>
+        <groupId>me.crack3dc0d3.minetopiavehiclesrevamp</groupId>
+        <artifactId>parent</artifactId>
         <version>0.0.1</version>
     </parent>
 
@@ -23,13 +23,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>me.crack3dc0d3</groupId>
-            <artifactId>minetopiavehicles-revamp-api</artifactId>
+            <groupId>me.crack3dc0d3.minetopiavehiclesrevamp</groupId>
+            <artifactId>api</artifactId>
             <version>0.0.1</version>
         </dependency>
         <dependency>
-            <groupId>me.crack3dc0d3</groupId>
-            <artifactId>minetopiavehicles-revamp-nms-1_12_R1</artifactId>
+            <groupId>me.crack3dc0d3.minetopiavehiclesrevamp</groupId>
+            <artifactId>v1_12_R1</artifactId>
             <version>0.0.1</version>
         </dependency>
         <dependency>
@@ -42,7 +42,6 @@
             <artifactId>annotations</artifactId>
             <version>18.0.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>

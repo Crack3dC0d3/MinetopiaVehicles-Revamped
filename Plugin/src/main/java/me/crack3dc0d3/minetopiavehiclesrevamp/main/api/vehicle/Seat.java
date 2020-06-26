@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -22,10 +23,10 @@ public class Seat {
     @Expose
     private String plate;
 
-    public Seat(Vehicle mainVehicle, Location offset, boolean isMain) {
+    public Seat(@NotNull Vehicle mainVehicle, Location offset, boolean isMain) {
         this.mainVehicle = mainVehicle;
         this.offsetLoc = offset;
-        this.offset = getStringLocation(offset);
+        this.offset = serializeLocation(offset);
         this.main = isMain;
         this.plate = mainVehicle.getLicensePlate();
         seats.add(this);
@@ -81,7 +82,7 @@ public class Seat {
      */
     public Location getOffsetLoc() {
         if(offsetLoc == null) {
-            offsetLoc = getLocationString(offset);
+            offsetLoc = deserializeLocation(offset);
         }
         return offsetLoc;
     }
@@ -119,27 +120,28 @@ public class Seat {
     }
 
     public void updateOffset() {
-        offsetLoc = getLocationString(offset);
+        offsetLoc = deserializeLocation(offset);
     }
 
-    public String getStringLocation(final Location l) {
+    @NotNull
+    private String serializeLocation(final Location l) {
         if (l == null) {
             return "";
         }
+        //TODO Change fietsbel to something else?
         return "fietsbel:" + l.getX() + ":" + l.getY() + ":" + l.getZ();
     }
 
-    public Location getLocationString(final String s) {
+    private Location deserializeLocation(final String s) {
         if (s == null || s.trim().equals("")) {
             return null;
         }
         final String[] parts = s.split(":");
         if (parts.length == 4) {
-            final World w = null;
             final double x = Double.parseDouble(parts[1]);
             final double y = Double.parseDouble(parts[2]);
             final double z = Double.parseDouble(parts[3]);
-            return new Location(w, x, y, z);
+            return new Location(null, x, y, z);
         }
         return null;
     }

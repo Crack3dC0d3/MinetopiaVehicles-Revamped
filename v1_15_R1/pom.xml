@@ -1,22 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>minetopiavehicles-revamp-parent</artifactId>
-        <groupId>me.crack3dc0d3</groupId>
+        <groupId>me.crack3dc0d3.minetopiavehiclesrevamp</groupId>
+        <artifactId>parent</artifactId>
         <version>0.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.crack3dc0d3.minetopiavehiclesrevamp.nms</groupId>
     <artifactId>v1_15_R1</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
-            <version>1.15-R0.1-SNAPSHOT</version>
+            <version>1.15.2-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -24,14 +22,8 @@
             <version>1.15.2-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>me.crack3dc0d3</groupId>
-            <artifactId>minetopiavehicles-revamp-api</artifactId>
-            <version>0.0.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>me.crack3dc0d3</groupId>
-            <artifactId>minetopiavehicles-revamp-api</artifactId>
+            <groupId>me.crack3dc0d3.minetopiavehiclesrevamp</groupId>
+            <artifactId>api</artifactId>
             <version>0.0.1</version>
             <scope>compile</scope>
         </dependency>
