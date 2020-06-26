@@ -37,6 +37,7 @@ public class Interact implements Listener {
                         v.setSkinItem(event.getItem());
                         v.spawn(event.getClickedBlock().getLocation().add(0, 0.3, 0));
                         event.getPlayer().getInventory().remove(event.getItem());
+                        event.setCancelled(true);
                     } else {
                         Messages.send(event.getPlayer(), Messages.NO_PERMISSION);
                     }
@@ -59,7 +60,7 @@ public class Interact implements Listener {
                 if(!v.getMainSeat().getSeatStand().getPassengers().isEmpty()) {
                     for(Seat seat : v.getSeats()) {
                         if(event.getRightClicked() == seat.getSeatStand()) {
-                            if(!event.getRightClicked().getPassengers().isEmpty()) {
+                            if(!event.getRightClicked().getPassengers().isEmpty() && !event.getPlayer().isInsideVehicle()) {
                                 Messages.send(event.getPlayer(), Messages.SEAT_FULL);
                                 return;
                             }
@@ -76,10 +77,9 @@ public class Interact implements Listener {
                     }
                 }
                 Seat s = v.getMainSeat();
-                if(!s.getSeatStand().getPassengers().isEmpty()) {
+                if (!s.getSeatStand().getPassengers().isEmpty() && !event.getPlayer().isInsideVehicle()) {
                     Messages.send(event.getPlayer(), Messages.SEAT_FULL);
-                }
-                if(v.getOwner() == event.getPlayer() || v.getRiders().contains(event.getPlayer().getUniqueId()) || event.getPlayer().hasPermission("minetopiavehicles.staff.overrideowner")) {
+                } else if (v.getOwner() == event.getPlayer() || v.getRiders().contains(event.getPlayer().getUniqueId()) || event.getPlayer().hasPermission("minetopiavehicles.staff.overrideowner")) {
                     s.getSeatStand().addPassenger(event.getPlayer());
                     event.getPlayer().setAllowFlight(true);
                     if(v.getType() == VehicleType.HELICOPTER) {
