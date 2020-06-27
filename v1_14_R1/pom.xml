@@ -9,18 +9,18 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>v1_16_R1</artifactId>
+    <artifactId>v1_14_R1</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
-            <version>1.16.1-R0.1-SNAPSHOT</version>
+            <version>1.14.4-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.16.1-R0.1-SNAPSHOT</version>
+            <version>1.14.4-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>me.crack3dc0d3.minetopiavehiclesrevamp</groupId>
@@ -28,5 +28,4 @@
             <version>0.0.1</version>
         </dependency>
     </dependencies>
-
 </project>
