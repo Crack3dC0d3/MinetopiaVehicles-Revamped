@@ -55,8 +55,8 @@ public class SubCommandMenu extends SubCommand {
                         }));
                 if(vehiclePos % 45 == 0 && vehiclePos >= 45 || vehiclePos == vehiclesize - 1) {
                     holder.setIcon(45, new Icon(
-                            new ItemFactory(Material.SKULL)
-                                    .setSkullOwner("MHF_ArrowLeft").setName("&6Terug naar het begin")
+                            new ItemFactory(Material.PAPER)
+                                    .setName("&6Terug naar het begin")
                                     .toItemStack())
                             .addClickAction(player1 -> player1.openInventory(pages.get(0).getInventory())));
                     holder.setIcon(49, new Icon(
@@ -66,8 +66,7 @@ public class SubCommandMenu extends SubCommand {
                             .addClickAction(HumanEntity::closeInventory)
                     );
                     holder.setIcon(53, new Icon(
-                            new ItemFactory(Material.SKULL_ITEM)
-                                    .setSkullOwner("MHF_ArrowRight")
+                            new ItemFactory(Material.PAPER)
                                     .setName("&6Volgende Pagina")
                                     .toItemStack())
                             .addClickAction(player1 -> player1.openInventory(pages.get(curPage).getInventory())));
