@@ -1,7 +1,7 @@
 # Naam van het voertuig. Moet uniek zijn. Word gebrukt als identificatie voor commands etc
-name: FIETS_MAN_ROOD
+name: FIETS_VROUW_BRUIN
 # Naam dat spelers ingame zien.
-displayname: §6Fiets Rood (Man)
+displayname: §6Fiets Bruin (Vrouw)
 # Hoe snel het voertuig op zijn maximum gaat
 baseSpeed: 15
 # Hoeveel snelheid er per tick bijopgeteld word.
@@ -19,7 +19,7 @@ type: CAR
 # Item van het voertuig. Link voor documentatie: https://www.spigotmc.org/wiki/itemstack-serialization/
 skin:
   ==: org.bukkit.inventory.ItemStack
-  damage: 1146
+  damage: 1048
   meta:
     ==: ItemMeta
     meta-type: UNSPECIFIC

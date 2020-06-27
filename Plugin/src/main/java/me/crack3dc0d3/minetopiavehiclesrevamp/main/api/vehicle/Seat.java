@@ -127,8 +127,7 @@ public class Seat {
         if (l == null) {
             return "";
         }
-        //TODO Change fietsbel to something else?
-        return "fietsbel:" + l.getX() + ":" + l.getY() + ":" + l.getZ();
+        return "radomplaceholder:" + l.getX() + ":" + l.getY() + ":" + l.getZ();
     }
 
     private Location deserializeLocation(final String s) {
