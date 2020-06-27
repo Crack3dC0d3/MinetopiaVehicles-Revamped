@@ -1,8 +1,15 @@
 package me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle;
 
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.Methods;
+import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -47,6 +54,19 @@ public class VehicleManager {
             }
         }
         return null;
+    }
+
+    public static void giveVehicle(VehicleBase vehicle, OfflinePlayer owner) {
+        String plate = Methods.generateLicencePlate();
+        Vehicle vehicleObj = new Vehicle(vehicle, plate, owner);
+        Player target = owner.getPlayer();
+        ItemStack toGive = vehicle.getSkinItem();
+        ItemMeta im = toGive.getItemMeta();
+        im.setDisplayName(vehicle.getDisplayname());
+        im.setLore(Arrays.asList(" ", ChatColor.GREEN + plate));
+        toGive.setItemMeta(im);
+        target.getInventory().addItem(toGive);
+        vehicleObj.setSkinItem(toGive);
     }
 
     public static List<VehicleBase> getBaseVehicles() {

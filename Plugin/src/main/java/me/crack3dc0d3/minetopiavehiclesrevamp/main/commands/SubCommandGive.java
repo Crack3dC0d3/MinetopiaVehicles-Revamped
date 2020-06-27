@@ -38,16 +38,7 @@ public class SubCommandGive extends SubCommand {
             return true;
         }
 
-        String plate = Methods.generateLicencePlate();
-        Vehicle vehicleObj = new Vehicle(vehicle, plate, offlineTarget);
-        Player target = offlineTarget.getPlayer();
-        ItemStack toGive = vehicle.getSkinItem();
-        ItemMeta im = toGive.getItemMeta();
-        im.setDisplayName(vehicle.getDisplayname());
-        im.setLore(Arrays.asList(" ", ChatColor.GREEN + plate));
-        toGive.setItemMeta(im);
-        target.getInventory().addItem(toGive);
-        vehicleObj.setSkinItem(toGive);
+        VehicleManager.giveVehicle(vehicle, offlineTarget);
 
         return true;
     }

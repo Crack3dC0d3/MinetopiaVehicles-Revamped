@@ -38,7 +38,7 @@ public final class Main extends JavaPlugin {
 
     private static ProtocolManager protocolManager;
 
-    private String version = "0.0.1c-BETA";
+    private String version = "0.0.1d-BETA";
 
 
     @Override

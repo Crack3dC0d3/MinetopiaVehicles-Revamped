@@ -21,6 +21,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
             new SubCommandHelp(),
             new SubCommandList(),
             new SubCommandGive(),
+            //new SubCommandMenu(),
             new SubCommandSetowner(),
             new SubCommandAddDriver(),
             new SubCommandAddMember(),
