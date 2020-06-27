@@ -45,7 +45,7 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
 
         instance = this;
-
+        RegistryHandler.register(this);
         // Updat3r
 
         Updat3r updat3r = Updat3r.getInstance();
@@ -69,7 +69,11 @@ public final class Main extends JavaPlugin {
         protocolManager = ProtocolLibrary.getProtocolManager();
         loadNMS();
         nms.handleInput(protocolManager, this);
-        databaseUtil = new SQLiteDataSource();
+        switch (settings.getConfig().getString("datastorage-type")) {
+            case "sqlite": databaseUtil = new SQLiteDataSource(); break;
+            case "mysql": databaseUtil = new MySQLDataSource(); break;
+            default: databaseUtil = new SQLiteDataSource();
+        }
         databaseUtil.init();
         //Bukkit.getPluginManager().registerEvents(new Interact(), this);
 
@@ -78,7 +82,6 @@ public final class Main extends JavaPlugin {
         } catch (IOException | InvalidConfigurationException | URISyntaxException e) {
             e.printStackTrace();
         }
-        RegistryHandler.register(this);
         for (Vehicle v : VehicleManager.getVehicles()) {
             int seatCount = 1;
             if(v.isSpawned()) {
@@ -214,6 +217,12 @@ public final class Main extends JavaPlugin {
         settings.getConfig().addDefault("max-helicopter-height", 200);
         settings.getConfig().addDefault("breakSpeed", 0.05);
         settings.getConfig().addDefault("enable-levelcheck-vehicles", true);
+        settings.getConfig().addDefault("datastorage-type", "sqlite");
+        settings.getConfig().addDefault("mysql.username", "username");
+        settings.getConfig().addDefault("mysql.password", "password");
+        settings.getConfig().addDefault("mysql.host", "host");
+        settings.getConfig().addDefault("mysql.port", "port");
+        settings.getConfig().addDefault("mysql.database", "database");
         settings.getConfig().options().copyDefaults(true);
         settings.saveConfig();
 

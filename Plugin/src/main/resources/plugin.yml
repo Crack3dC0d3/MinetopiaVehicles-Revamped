@@ -6,6 +6,8 @@ authors: [Crack3dC0d3]
 description: MinetopiaVehiclesPlugin
 depend:
   - ProtocolLib
+softdepend:
+  - MinetopiaSDB
 commands:
   minetopiavehicles:
     usage: /<command>
