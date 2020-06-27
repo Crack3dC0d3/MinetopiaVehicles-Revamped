@@ -63,11 +63,6 @@ public final class Main extends JavaPlugin {
             }
         }
 
-//        Load libraries
-        LibraryLoader libLoader = new LibraryLoader();
-        libLoader.loadLibrary("gson-2.8.6.jar", "https://search.maven.org/remotecontent?filepath=com/google/code/gson/gson/2.8.6/gson-2.8.6.jar");
-        libLoader.loadLibrary("HikariCP-2.7.8.jar", "https://search.maven.org/remotecontent?filepath=com/zaxxer/HikariCP/2.7.8/HikariCP-2.7.8.jar");
-
         loadFiles();
 
         protocolManager = ProtocolLibrary.getProtocolManager();
