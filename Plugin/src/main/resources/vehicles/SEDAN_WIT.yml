@@ -1,7 +1,7 @@
 # Naam van het voertuig. Moet uniek zijn. Word gebrukt als identificatie voor commands etc
-name: SEDAN_ROOD
+name: SEDAN_WIT
 # Naam dat spelers ingame zien.
-displayname: §6Sedan Rood
+displayname: §6Sedan Wit
 # Hoe snel het voertuig op zijn maximum gaat
 baseSpeed: 40
 # Hoeveel snelheid er per tick bijopgeteld word.
@@ -23,9 +23,10 @@ type: CAR
 # Item van het voertuig. Link voor documentatie: https://www.spigotmc.org/wiki/itemstack-serialization/
 skin:
   ==: org.bukkit.inventory.ItemStack
-  damage: 1017
+  damage: 1023
   meta:
     ==: ItemMeta
     meta-type: UNSPECIFIC
+    Damage: 1041
     Unbreakable: true
   type: DIAMOND_HOE
