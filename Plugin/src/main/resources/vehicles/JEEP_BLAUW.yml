@@ -19,7 +19,7 @@ type: CAR
 # Item van het voertuig. Link voor documentatie: https://www.spigotmc.org/wiki/itemstack-serialization/
 skin:
   ==: org.bukkit.inventory.ItemStack
-  damage: 1059
+  damage: 1159
   meta:
     ==: ItemMeta
     meta-type: UNSPECIFIC
