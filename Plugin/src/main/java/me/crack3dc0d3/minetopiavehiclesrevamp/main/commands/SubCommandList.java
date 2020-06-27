@@ -33,10 +33,11 @@ public class SubCommandList implements ISubCommand {
 
     @Override
     public void execute(CommandSender sender, Command command, String[] args) {
+        List<List<VehicleBase>> pages = Lists.partition(VehicleManager.getBaseVehicles(), 8);
         List<VehicleBase> page;
         try {
             int index = Integer.parseInt(args[0]) - 1;
-            page = Lists.partition(VehicleManager.getBaseVehicles(), 8).get(index);
+            page = pages.get(index);
         } catch (NumberFormatException | IndexOutOfBoundsException exception) {
             Messages.send(sender, Messages.INVALID_ARGUMENTS, "/" + getUsage());
             return;
@@ -46,7 +47,7 @@ public class SubCommandList implements ISubCommand {
         for (VehicleBase base : page) {
             builder.append("&a").append(base.getName()).append(" - /vehicle give <username> ").append(base.getName()).append("\n");
         }
-        builder.append("&2------[Page ").append(page).append("/").append(VehicleManager.getBaseVehicles().size()).append("]-------");
+        builder.append("&2------[Page ").append(page).append("/").append(pages.size()).append("]-------");
 
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', builder.toString()));
     }
