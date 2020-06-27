@@ -20,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -74,7 +75,7 @@ public final class Main extends JavaPlugin {
 
         try {
             loadVehicles();
-        } catch (IOException | InvalidConfigurationException e) {
+        } catch (IOException | InvalidConfigurationException | URISyntaxException e) {
             e.printStackTrace();
         }
         RegistryHandler.register(this);
@@ -166,9 +167,9 @@ public final class Main extends JavaPlugin {
         this.getLogger().info("Support word geladen voor versie " + version);
     }
 
-    private void loadVehicles() throws IOException, InvalidConfigurationException {
+    private void loadVehicles() throws IOException, InvalidConfigurationException, URISyntaxException {
         File dir = new File(getDataFolder() + File.separator + "vehicles");
-        File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+        File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
         JarFile jar = new JarFile(jarFile);
         Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
         while(entries.hasMoreElements()) {
