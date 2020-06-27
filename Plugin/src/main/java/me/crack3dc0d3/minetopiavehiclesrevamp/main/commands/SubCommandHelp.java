@@ -4,47 +4,22 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-public class SubCommandHelp  implements ISubCommand {
-    @Override
-    public String getPermission() {
-        return "minetopiavehicles.help";
+import java.util.StringJoiner;
+
+public class SubCommandHelp extends SubCommand {
+    public SubCommandHelp() {
+        super("help", "Help bericht", "help", "minetopiavehicles.commands.help");
     }
 
     @Override
-    public String getName() {
-        return "help";
-    }
-
-    @Override
-    public String getDescription() {
-        return "Help bericht.";
-    }
-
-    @Override
-    public String getUsage() {
-        return "vehicle help";
-    }
-
-    @Override
-    public void execute(CommandSender sender, Command command, String[] args) {
-
-        StringBuilder helpBuilder = new StringBuilder();
-        
-
-        helpBuilder.append(colorFormat("&2---------------------------------------------\n"));
-
-        for (ISubCommand subCommand:CommandHandler.getCommands()
-             ) {
-        	
-            helpBuilder.append(colorFormat("&2/&a")).append(subCommand.getUsage()).append(colorFormat(" &2- &a")).append(subCommand.getDescription()).append("\n");
-            
+    public boolean execute(CommandSender sender, String label, String[] args) {
+        String balkje = ChatColor.AQUA + "---------------------------------------------";
+        StringJoiner joiner = new StringJoiner("\n", balkje + "\n", balkje);
+        for (SubCommand subCommand : CommandHandler.getCommands()) {
+            joiner.add(String.format("%s/%s%s %s %s- %s%s", ChatColor.AQUA, ChatColor.GREEN, label, subCommand.getUsage(),
+                    ChatColor.AQUA, ChatColor.GREEN, subCommand.getDescription()));
         }
-        helpBuilder.append(colorFormat("&2---------------------------------------------"));
-
-        sender.sendMessage(helpBuilder.toString());
-    }
-    
-    public String colorFormat(String s){
-        return s.replace('&', ChatColor.COLOR_CHAR);
+        sender.sendMessage(joiner.toString());
+        return true;
     }
 }

@@ -4,12 +4,15 @@ import me.crack3dc0d3.minetopiavehiclesrevamp.main.Main;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import java.util.Arrays;
+
 public enum Messages {
 
     MAX_HELICOPTER_HEIGHT("&cJe kan niet hoger vliegen!"),
     VEHICLE_DOESNT_EXIST("&cVoertuig &4%s &cbestaat niet!"),
     VEHICLE_GIVEN("&aJe hebt het voertuig \"%s\" gekregen."),
-    INVALID_ARGUMENTS("&cVerkeerde argumenten, gebruik &4%s"),
+    INVALID_ARGUMENTS("&cVerkeerde argumenten, gebruik &4/%s %s"),
+    UNKNOWN_COMMAND("&cOnbekend commando, gebruik /%s help voor een lijst met commands!"),
     PLAYER_NOT_ONLINE("&cSpeler &4%s &cis niet online!"),
     SEAT_FULL("&cEr zit al iemand op deze stoel!"),
     CANNOT_EXIT_IN_AIR("&cJe kan niet uitstappen in de lucht!"),
@@ -20,6 +23,8 @@ public enum Messages {
     DRIVER_ADDED("&aJe hebt %s toegevoegt als driver op dit voertuig"),
     MEMBER_REMOVED("&aJe hebt %s verwijderd als member op dit voertuig"),
     DRIVER_REMOVED("&aJe hebt %s verwijderd als driver op dit voertuig"),
+    ALREADY_ADDED("&a%s was al toegevoegt aan dit voertuig"),
+    ALREADY_REMOVED("&a%s was al niet toegevoegd aan dit voertuig"),
     NO_DRIVER("&cSpeler %s is geen driver!"),
     NO_MEMBER("&cSpeler %s is geen member!"),
     NEVER_JOINED("&cDe speler %s heeft nog nooit gespeeld op de server!"),
@@ -32,8 +37,9 @@ public enum Messages {
         this.message = message;
     }
 
-    public static void send(CommandSender player, Messages key, String... placeholders) {
+    public static void send(CommandSender player, Messages key, Object... placeholders) {
         if (Main.getMessages().getConfig().getString(key.toString()) != null) {
+            System.out.println("placeholders = " + Arrays.toString(placeholders));
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                     String.format(Main.getMessages().getConfig().getString(key.toString()), placeholders)));
         } else {
