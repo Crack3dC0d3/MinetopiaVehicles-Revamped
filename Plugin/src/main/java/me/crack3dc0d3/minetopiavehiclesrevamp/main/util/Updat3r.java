@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -82,6 +83,7 @@ public class Updat3r {
 
                 outputStream.close();
                 inputStream.close();
+                Bukkit.shutdown();
             } else {
                 System.out.println("[Minetopiavehicles Updat3r] An error has occured whilst downloading this resource. Contact support on discord: discord.gg/cuUfg4m  (resp. code: " + responseCode + ")");
             }

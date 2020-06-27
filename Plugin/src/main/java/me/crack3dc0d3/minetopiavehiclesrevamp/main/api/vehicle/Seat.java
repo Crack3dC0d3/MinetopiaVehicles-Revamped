@@ -44,7 +44,6 @@ public class Seat {
         stand.setCollidable(false);
         stand.setGravity(false);
         stand.setVisible(false);
-        stand.setCustomNameVisible(true);
         if(this.getMainVehicle().getMainSeat() == this) {
             stand.setCustomName("MINETOPIAVEHICLES_MAINSEAT_" + mainVehicle.getLicensePlate());
         } else {

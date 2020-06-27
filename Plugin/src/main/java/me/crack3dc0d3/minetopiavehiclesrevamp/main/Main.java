@@ -16,6 +16,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -51,7 +52,7 @@ public final class Main extends JavaPlugin {
         Updat3r updat3r = Updat3r.getInstance();
         Updat3r.Update update = updat3r.getLatestUpdate("mtvehicles-opensource", "qq8lwF7kREzIYLZs3p38GNXUaccvBQ2c");
         if(update != null) {
-            if(!update.getVersion().equals(version)) {
+            if(!update.getVersion().equals(this.getDescription().getVersion())) {
                 if(update.isCritical()) {
                     this.getLogger().log(Level.SEVERE, "A Critical update has been found. Server will restart now!");
                     updat3r.downloadLatest(update.getDownloadLink(), "mtvehicles-opensource", this);
@@ -59,7 +60,8 @@ public final class Main extends JavaPlugin {
                     return;
                 }
                 updat3r.downloadLatest(update.getDownloadLink(), "mtvehicles-opensource", this);
-                getLogger().log(Level.INFO, "An update has been found and downloaded. Restart your server to apply!");
+                getLogger().log(Level.INFO, "An update has been found and downloaded. Server will restart once its downloaded!");
+                return;
             }
         }
 

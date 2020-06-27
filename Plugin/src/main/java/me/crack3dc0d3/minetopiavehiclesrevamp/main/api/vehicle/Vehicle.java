@@ -92,7 +92,6 @@ public class Vehicle {
         vehicle.setCollidable(false);
         vehicle.setGravity(true);
         vehicle.setVisible(false);
-        vehicle.setCustomNameVisible(true);
 
         this.mainStand = vehicle;
 
@@ -112,14 +111,12 @@ public class Vehicle {
         skinStand.setInvulnerable(true);
         skinStand.setCustomName("MINETOPIAVEHICLES_SKIN_" + licensePlate);
         skinStand.setGravity(false);
-        skinStand.setCustomNameVisible(true);
 
         if(type == VehicleType.HELICOPTER) {
             this.bladeStand = mainStand.getWorld().spawn(mainStand.getLocation().add(0, -0.15, -0.8), ArmorStand.class);
             bladeStand.setGravity(false);
             bladeStand.setVisible(false);
             bladeStand.setCustomName("MINETOPIAVEHICLES_WIEKEN_" + licensePlate);
-            bladeStand.setCustomNameVisible(true);
 
 
 
