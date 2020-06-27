@@ -23,10 +23,7 @@ public class SubCommandMenu extends SubCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        int totalPages = VehicleManager.getBaseVehicles().size() / 45;
-        if(totalPages == 0) {
-            totalPages = 1;
-        }
+        double totalPages = Math.ceil((double) VehicleManager.getBaseVehicles().size() / 45D);
 
         List<CustomHolder> pages = new ArrayList<>();
 
