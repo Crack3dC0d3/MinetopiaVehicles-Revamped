@@ -36,39 +36,38 @@ public class NMSHandler implements NMS {
 
     @Override
     public void handleInput(ProtocolManager manager, Plugin main) {
-        manager.addPacketListener(
-                new PacketAdapter(main, ListenerPriority.LOWEST, PacketType.Play.Client.STEER_VEHICLE) {
-                    @Override
-                    public void onPacketReceiving(PacketEvent event) {
-                        if (event.getPacketType().equals(PacketType.Play.Client.STEER_VEHICLE)) {
-                            PacketPlayInSteerVehicle ppisv = (PacketPlayInSteerVehicle) event.getPacket().getHandle();
-                            float forward = ppisv.c();
-                            float side = ppisv.b();
-                            boolean w, a, s, d;
-                            if (forward > 0) {
-                                w = true;
-                                s = false;
-                            } else if (forward < 0) {
-                                w = false;
-                                s = true;
-                            } else {
-                                w = false;
-                                s = false;
-                            }
-                            if (side > 0) {
-                                a = true;
-                                d = false;
-                            } else if (side < 0) {
-                                a = false;
-                                d = true;
-                            } else {
-                                a = false;
-                                d = false;
-                            }
-                            methods.handleInput(new InputHandler(w, a, s, d, ppisv.d(), event.getPlayer()));
-                        }
+        manager.addPacketListener(new PacketAdapter(main, ListenerPriority.LOWEST, PacketType.Play.Client.STEER_VEHICLE) {
+            @Override
+            public void onPacketReceiving(PacketEvent event) {
+                if (event.getPacketType().equals(PacketType.Play.Client.STEER_VEHICLE)) {
+                    PacketPlayInSteerVehicle ppisv = (PacketPlayInSteerVehicle) event.getPacket().getHandle();
+                    float forward = ppisv.c();
+                    float side = ppisv.b();
+                    boolean w, a, s, d;
+                    if (forward > 0) {
+                        w = true;
+                        s = false;
+                    } else if (forward < 0) {
+                        w = false;
+                        s = true;
+                    } else {
+                        w = false;
+                        s = false;
                     }
-                });
+                    if (side > 0) {
+                        a = true;
+                        d = false;
+                    } else if (side < 0) {
+                        a = false;
+                        d = true;
+                    } else {
+                        a = false;
+                        d = false;
+                    }
+                    methods.handleInput(new InputHandler(w, a, s, d, ppisv.d(), event.getPlayer()));
+                }
+            }
+        });
     }
 
     @Override
