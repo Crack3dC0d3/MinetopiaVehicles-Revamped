@@ -69,7 +69,6 @@ public final class Main extends JavaPlugin {
         loadNMS();
         nms.handleInput(protocolManager, this);
         switch (settings.getConfig().getString("datastorage-type")) {
-            case "sqlite": databaseUtil = new SQLiteDataSource(); break;
             case "mysql": databaseUtil = new MySQLDataSource(); break;
             default: databaseUtil = new SQLiteDataSource();
         }
