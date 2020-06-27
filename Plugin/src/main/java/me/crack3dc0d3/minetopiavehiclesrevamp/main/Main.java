@@ -63,7 +63,6 @@ public final class Main extends JavaPlugin {
             }
         }
 
-
         loadFiles();
 
         protocolManager = ProtocolLibrary.getProtocolManager();
