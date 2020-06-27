@@ -34,7 +34,7 @@ public class SubCommandMenu extends SubCommand {
         for (int i = 0; i < totalPages ; i++) {
 
             int curPage = i+1;
-            CustomHolder holder = new CustomHolder(54, "\u00a76\u00a7lVoertuigen " + curPage + "/" + totalPages);
+            CustomHolder holder = new CustomHolder(54, "\u00a76\u00a7lVoertuigen " + curPage + "/" + Math.round(totalPages));
 
 //            int a = vehiclesToAdd / 45;
 //            int overige = vehiclesToAdd % 45;
