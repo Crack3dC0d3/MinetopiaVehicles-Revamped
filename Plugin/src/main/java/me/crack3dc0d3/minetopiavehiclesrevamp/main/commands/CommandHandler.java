@@ -63,7 +63,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         SubCommand subCommand = getCommand(args[0]);
         if (subCommand == null || subCommand.getPermission() == null || !sender.hasPermission(subCommand.getPermission())) return null;
         else return subCommand.onTabComplete(Arrays.copyOfRange(args, 1, args.length)).stream()
-                .filter(name -> name.startsWith(args[args.length - 1])).collect(Collectors.toList());
+                .filter(name -> name.toLowerCase().startsWith(args[args.length - 1])).collect(Collectors.toList());
     }
 
     public static List<SubCommand> getCommands() {

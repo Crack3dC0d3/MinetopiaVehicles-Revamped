@@ -23,6 +23,8 @@ public enum Messages {
     DRIVER_ADDED("&aJe hebt %s toegevoegt als driver op dit voertuig"),
     MEMBER_REMOVED("&aJe hebt %s verwijderd als member op dit voertuig"),
     DRIVER_REMOVED("&aJe hebt %s verwijderd als driver op dit voertuig"),
+    ALREADY_ADDED("&a%s was al toegevoegt aan dit voertuig"),
+    ALREADY_REMOVED("&a%s was al niet toegevoegd aan dit voertuig"),
     NO_DRIVER("&cSpeler %s is geen driver!"),
     NO_MEMBER("&cSpeler %s is geen member!"),
     NEVER_JOINED("&cDe speler %s heeft nog nooit gespeeld op de server!"),

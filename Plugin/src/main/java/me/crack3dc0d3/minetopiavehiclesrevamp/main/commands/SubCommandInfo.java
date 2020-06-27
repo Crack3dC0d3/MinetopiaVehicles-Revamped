@@ -34,9 +34,9 @@ public class SubCommandInfo extends SubCommand {
                 }
 
                 String members = v.getMembers().stream().map(uuid -> Bukkit.getOfflinePlayer(uuid).getName())
-                        .collect(Collectors.joining(","));
+                        .collect(Collectors.joining(", "));
                 String riders = v.getRiders().stream().map(uuid -> Bukkit.getOfflinePlayer(uuid).getName())
-                        .collect(Collectors.joining(","));
+                        .collect(Collectors.joining(", "));
 
                 StringJoiner joiner = new StringJoiner("\n" + ChatColor.AQUA,
                         ChatColor.AQUA + "------[&aVehicle Info&2]------\n", "");

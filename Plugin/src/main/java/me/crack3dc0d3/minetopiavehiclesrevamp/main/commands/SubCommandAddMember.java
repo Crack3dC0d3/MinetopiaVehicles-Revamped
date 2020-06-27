@@ -36,8 +36,7 @@ public class SubCommandAddMember extends SubCommand {
                     Messages.send(sender, Messages.NO_VEHICLE_IN_HAND);
                     return true;
                 }
-                v.addMember(offlineTarget);
-                Messages.send(sender, Messages.MEMBER_ADDED, offlineTarget.getName());
+                Messages.send(sender, v.addMember(offlineTarget) ? Messages.MEMBER_ADDED : Messages.ALREADY_ADDED, offlineTarget.getName());
             } else Messages.send(sender, Messages.NO_VEHICLE_IN_HAND);
         } else Messages.send(sender, Messages.ONLY_PLAYER);
         return true;

@@ -36,8 +36,7 @@ public class SubCommandAddDriver extends SubCommand {
                     Messages.send(sender, Messages.NO_VEHICLE_IN_HAND);
                     return true;
                 }
-                v.addRider(offlineTarget);
-                Messages.send(sender, Messages.DRIVER_ADDED, offlineTarget.getName());
+                Messages.send(sender, v.addRider(offlineTarget) ? Messages.DRIVER_ADDED : Messages.ALREADY_ADDED, offlineTarget.getName());
             } else Messages.send(sender, Messages.NO_VEHICLE_IN_HAND);
         } else Messages.send(sender, Messages.ONLY_PLAYER);
         return true;

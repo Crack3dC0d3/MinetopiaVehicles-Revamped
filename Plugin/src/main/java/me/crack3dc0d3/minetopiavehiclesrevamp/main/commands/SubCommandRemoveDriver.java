@@ -40,8 +40,7 @@ public class SubCommandRemoveDriver extends SubCommand {
                     Messages.send(sender, Messages.NO_DRIVER, offlineTarget.getName());
                     return true;
                 }
-                v.removeRider(offlineTarget);
-                Messages.send(sender, Messages.MEMBER_REMOVED, offlineTarget.getName());
+                Messages.send(sender, v.removeRider(offlineTarget) ? Messages.MEMBER_REMOVED : Messages.ALREADY_REMOVED, offlineTarget.getName());
             } else Messages.send(sender, Messages.NO_VEHICLE_IN_HAND);
         } else Messages.send(sender, Messages.ONLY_PLAYER);
         return true;
