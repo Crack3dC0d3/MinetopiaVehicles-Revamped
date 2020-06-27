@@ -8,46 +8,40 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
-public class SubCommandList implements ISubCommand {
-    @Override
-    public String getPermission() {
-        return "minetopiavehicles.command.list";
+public class SubCommandList extends SubCommand {
+    public SubCommandList() {
+        super("list", "Lijst met alle voertuigen", "list [page]", "minetopiavehicles.command.list");
     }
 
     @Override
-    public String getName() {
-        return "list";
-    }
-
-    @Override
-    public String getDescription() {
-        return "Lists all vehicles";
-    }
-
-    @Override
-    public String getUsage() {
-        return "vehicle list [page]";
-    }
-
-    @Override
-    public void execute(CommandSender sender, Command command, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         int page;
         try {
             page = Integer.parseInt(args[0]);
-        }catch (NumberFormatException | ArrayIndexOutOfBoundsException exception) {
-            Messages.send(sender, Messages.INVALID_ARGUMENTS, "/" + getUsage());
-            return;
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException exception) {
+            return false;
         }
         List<List<VehicleBase>> pages = Lists.partition(VehicleManager.getBaseVehicles(), 8);
-        StringBuilder builder = new StringBuilder();
-        builder.append("&2------[Vehicle List]------\n");
+        String balkje = ChatColor.AQUA + "------";
+        StringJoiner joiner = new StringJoiner("\n", balkje + "[Vehicle List]" + balkje,
+                balkje + "[Page " + page + "/" + pages.size() + "]" + balkje);
         for (VehicleBase base : pages.get(page - 1)) {
-            builder.append("&a").append(base.getName()).append(" - /vehicle give <username> ").append(base.getName()).append("\n");
+            joiner.add(ChatColor.GREEN + base.getName() + " - /" + label + " give <player> " + base.getName());
         }
-        builder.append("&2------[Page " + page + "/" + pages.size() + "]-------");
 
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', builder.toString()));
+        sender.sendMessage(joiner.toString());
+        return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(String[] args) {
+        if (args.length == 1) return new ArrayList<String>() {{
+            for (int i = 1; i <= Lists.partition(VehicleManager.getBaseVehicles(), 8).size(); i++) add("" + i);
+        }};
+        return new ArrayList<>();
     }
 }
