@@ -69,7 +69,11 @@ public class SubCommandMenu extends SubCommand {
                             new ItemFactory(Material.PAPER)
                                     .setName("&6Volgende Pagina")
                                     .toItemStack())
-                            .addClickAction(player1 -> player1.openInventory(pages.get(curPage).getInventory())));
+                            .addClickAction(player1 -> {
+                                if(curPage < pages.size()) {
+                                    player1.openInventory(pages.get(curPage).getInventory());
+                                }
+                            }));
                     pages.add(holder);
                     vehiclePos++;
                     continue pages;
