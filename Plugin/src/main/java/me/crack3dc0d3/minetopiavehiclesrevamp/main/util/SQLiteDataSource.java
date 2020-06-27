@@ -47,7 +47,7 @@ public class SQLiteDataSource implements IDataSource {
                     "SELECT * FROM vehicles"
             );
             ResultSet set = stmt.executeQuery();
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
             List<Vehicle> vehicles = new ArrayList<>();
             while (set.next()) {
                 Vehicle v = gson.fromJson(set.getString(2), Vehicle.class);

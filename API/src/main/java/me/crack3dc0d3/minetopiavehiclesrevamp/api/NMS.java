@@ -12,6 +12,8 @@ public interface NMS {
 
     void setPosition(ArmorStand a, Location pos);
 
+    void resetFlight(Player player);
+
     void openMenu(Player p, Plugin main);
 
 }

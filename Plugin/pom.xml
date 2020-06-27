@@ -62,7 +62,19 @@
             <artifactId>slf4j-jdk14</artifactId>
             <version>1.7.25</version>
         </dependency>
+        <dependency>
+            <groupId>nl.minetopiasdb</groupId>
+            <artifactId>plugin</artifactId>
+            <version>2.0.4</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>mrwouter-repo</id>
+            <url>https://repo.mrwouter.nl/</url>
+        </repository>
+    </repositories>
     <build>
         <directory>../target</directory>
         <finalName>minetopiavehicles-revamp-${project.version}</finalName>

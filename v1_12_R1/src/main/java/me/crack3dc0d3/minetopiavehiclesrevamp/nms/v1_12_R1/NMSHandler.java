@@ -8,7 +8,9 @@ import com.comphenix.protocol.events.PacketEvent;
 import me.crack3dc0d3.minetopiavehiclesrevamp.api.ApiMethods;
 import me.crack3dc0d3.minetopiavehiclesrevamp.api.InputHandler;
 import me.crack3dc0d3.minetopiavehiclesrevamp.api.NMS;
+import net.minecraft.server.v1_12_R1.DedicatedServer;
 import net.minecraft.server.v1_12_R1.EntityArmorStand;
+import net.minecraft.server.v1_12_R1.MinecraftServer;
 import net.minecraft.server.v1_12_R1.PacketPlayInSteerVehicle;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftArmorStand;
@@ -72,6 +74,11 @@ public class NMSHandler implements NMS {
     public void setPosition(ArmorStand a, Location pos) {
         EntityArmorStand stand = ((CraftArmorStand)a).getHandle();
         stand.setLocation(pos.getX(), pos.getY(), pos.getZ(), pos.getYaw(), pos.getPitch());
+    }
+
+    @Override
+    public void resetFlight(Player player) {
+        player.setAllowFlight(Boolean.parseBoolean((String) ((DedicatedServer) MinecraftServer.getServer()).propertyManager.properties.get("allow-flight")));
     }
 
     @Override

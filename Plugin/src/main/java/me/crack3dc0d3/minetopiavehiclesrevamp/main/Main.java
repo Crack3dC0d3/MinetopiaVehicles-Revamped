@@ -37,7 +37,7 @@ public final class Main extends JavaPlugin {
 
     private static ProtocolManager protocolManager;
 
-    private String version = "0.0.1-BETA";
+    private String version = "0.0.1c-BETA";
 
 
     @Override
@@ -212,6 +212,7 @@ public final class Main extends JavaPlugin {
 
         settings.getConfig().addDefault("max-helicopter-height", 200);
         settings.getConfig().addDefault("breakSpeed", 0.05);
+        settings.getConfig().addDefault("enable-levelcheck-vehicles", true);
         settings.getConfig().options().copyDefaults(true);
         settings.saveConfig();
 

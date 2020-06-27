@@ -16,6 +16,7 @@
         <module>Plugin</module>
         <module>v1_12_R1</module>
         <module>v1_15_R1</module>
+        <module>v1_16_R1</module>
     </modules>
 
     <properties>
@@ -40,7 +41,7 @@
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
-            <version>4.5.0</version>
+            <version>LATEST</version>
         </dependency>
     </dependencies>
 

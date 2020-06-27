@@ -1,5 +1,6 @@
 package me.crack3dc0d3.minetopiavehiclesrevamp.nms.v1_15_R1;
 
+
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
@@ -8,7 +9,9 @@ import com.comphenix.protocol.events.PacketEvent;
 import me.crack3dc0d3.minetopiavehiclesrevamp.api.ApiMethods;
 import me.crack3dc0d3.minetopiavehiclesrevamp.api.InputHandler;
 import me.crack3dc0d3.minetopiavehiclesrevamp.api.NMS;
+import net.minecraft.server.v1_15_R1.DedicatedServer;
 import net.minecraft.server.v1_15_R1.EntityArmorStand;
+import net.minecraft.server.v1_15_R1.MinecraftServer;
 import net.minecraft.server.v1_15_R1.PacketPlayInSteerVehicle;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftArmorStand;
@@ -39,8 +42,8 @@ public class NMSHandler implements NMS {
                     public void onPacketReceiving(PacketEvent event) {
                         if (event.getPacketType().equals(PacketType.Play.Client.STEER_VEHICLE)) {
                             PacketPlayInSteerVehicle ppisv = (PacketPlayInSteerVehicle) event.getPacket().getHandle();
-                            float forward = ppisv.b();
-                            float side = ppisv.c();
+                            float forward = ppisv.c();
+                            float side = ppisv.b();
                             boolean w, a, s, d;
                             if (forward > 0) {
                                 w = true;
@@ -72,6 +75,11 @@ public class NMSHandler implements NMS {
     public void setPosition(ArmorStand a, Location pos) {
         EntityArmorStand stand = ((CraftArmorStand)a).getHandle();
         stand.setLocation(pos.getX(), pos.getY(), pos.getZ(), pos.getYaw(), pos.getPitch());
+    }
+
+    @Override
+    public void resetFlight(Player player) {
+        player.setAllowFlight(((DedicatedServer) MinecraftServer.getServer()).propertyManager.getProperties().allowFlight);
     }
 
     @Override
