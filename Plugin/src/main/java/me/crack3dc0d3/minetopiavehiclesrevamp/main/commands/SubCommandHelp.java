@@ -1,7 +1,6 @@
 package me.crack3dc0d3.minetopiavehiclesrevamp.main.commands;
 
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.StringJoiner;
