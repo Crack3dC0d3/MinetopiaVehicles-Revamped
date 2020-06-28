@@ -5,7 +5,6 @@ import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleManager;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.enums.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -48,7 +47,15 @@ public class SubCommandRemoveMember extends SubCommand {
 
     @Override
     public List<String> onTabComplete(String[] args) {
-        if (args.length == 1) return Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList());
-        else return new ArrayList<>();
+        List<String> tabComplete = new ArrayList<>();
+
+        if (args.length == 1) {
+            tabComplete = Bukkit.getOnlinePlayers()
+                    .stream()
+                    .map(Player::getName)
+                    .collect(Collectors.toList());
+        }
+
+        return tabComplete;
     }
 }

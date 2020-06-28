@@ -39,14 +39,25 @@ public class SubCommandGive extends SubCommand {
         }
 
         VehicleManager.giveVehicle(vehicle, offlineTarget);
-
         return true;
     }
 
     @Override
     public List<String> onTabComplete(String[] args) {
-        if (args.length == 1) return Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList());
-        else if (args.length == 2) return VehicleManager.getBaseVehicles().stream().map(VehicleBase::getName).collect(Collectors.toList());
-        return new ArrayList<>();
+        List<String> tabComplete = new ArrayList<>();
+
+        if (args.length == 1) {
+            tabComplete = Bukkit.getOnlinePlayers()
+                .stream()
+                .map(Player::getName)
+                .collect(Collectors.toList());
+        } else if (args.length == 2) {
+            tabComplete = VehicleManager.getBaseVehicles()
+                .stream()
+                .map(VehicleBase::getName)
+                .collect(Collectors.toList());
+        }
+
+        return tabComplete;
     }
 }

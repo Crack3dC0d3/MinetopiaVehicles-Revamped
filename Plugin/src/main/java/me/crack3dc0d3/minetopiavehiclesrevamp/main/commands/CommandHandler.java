@@ -57,23 +57,27 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-
-        if (args.length == 1) return commands.stream().map(SubCommand::getName).filter(name -> name.startsWith(args[0]))
+        if (args.length == 1) {
+            return commands.stream()
+                .map(SubCommand::getName)
+                .filter(name -> name.startsWith(args[0]))
                 .collect(Collectors.toList());
+        }
 
         SubCommand subCommand = getCommand(args[0]);
         if (subCommand == null || subCommand.getPermission() == null || !sender.hasPermission(subCommand.getPermission())) return null;
-        else return subCommand.onTabComplete(Arrays.copyOfRange(args, 1, args.length)).stream()
-                .filter(name -> name.toLowerCase().startsWith(args[args.length - 1])).collect(Collectors.toList());
+
+        return subCommand.onTabComplete(Arrays.copyOfRange(args, 1, args.length))
+                .stream()
+                .filter(name -> name.toLowerCase().startsWith(args[args.length - 1]))
+                .collect(Collectors.toList());
     }
 
     public static List<SubCommand> getCommands() {
         return commands;
     }
 
-    SubCommand getCommand(String name) {
-        for (SubCommand subCmd : commands)
-            if (subCmd.getName().equalsIgnoreCase(name)) return subCmd;
-        return null;
+    public SubCommand getCommand(String name) {
+        return commands.stream().filter(subCmd -> subCmd.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 }
