@@ -1,28 +1,36 @@
 # Naam van het voertuig. Moet uniek zijn. Word gebrukt als identificatie voor commands etc
-name: OXBOARD_ROOD
+name: HELICOPTER_OBSIDIAN
 # Naam dat spelers ingame zien.
-displayname: §6Oxboard Rood
+displayname: §6Helicopter Obsidian
 # Hoe snel het voertuig op zijn maximum gaat
-baseSpeed: 20
+baseSpeed: 80
 # Hoeveel snelheid er per tick bijopgeteld word.
-traction: 0.01
+traction: 0.04
+# De maximumsnelheid waarmee het voertuig omhoog kan
+maxUpSpeed: 1.5
+# De maximumsnelheid waarmee het voertuig omlaag kan
+maxDownSpeed: 1.5
+# Hoeveel snelheid omhoog er per tick bijopgeteld word.
+upSpeed: 0.02
+# Hoeveel snelheid omlaag er per tick bijopgeteld word.
+downSpeed: 0.02
 # De bestuurderstoel. Moet bestaan in seatOffsets
 mainSeat: "seat1"
 # Offset van de stoel vanaf de armorstand van het voertuig
 seatOffsets:
   seat1:
-    x: -0.2
-    y: -1.4
+    x: -0.3
+    y: -1
     z: 0
 # Het type voertuig. CAR voor een auto/motor. HELICOPTER voor een helikopter.
-type: CAR
+type: HELICOPTER
 # Item van het voertuig. Link voor documentatie: https://www.spigotmc.org/wiki/itemstack-serialization/
 skin:
   ==: org.bukkit.inventory.ItemStack
-  damage: 1033
+  damage: 1181
   meta:
     ==: ItemMeta
     meta-type: UNSPECIFIC
-    Damage: 1033
+    Damage: 1130
     Unbreakable: true
   type: DIAMOND_HOE

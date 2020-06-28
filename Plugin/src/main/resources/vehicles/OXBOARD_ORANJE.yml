@@ -1,7 +1,7 @@
 # Naam van het voertuig. Moet uniek zijn. Word gebrukt als identificatie voor commands etc
-name: OXBOARD_ROOD
+name: OXBOARD_ORANJE
 # Naam dat spelers ingame zien.
-displayname: §6Oxboard Rood
+displayname: §6Oxboard Oranje
 # Hoe snel het voertuig op zijn maximum gaat
 baseSpeed: 20
 # Hoeveel snelheid er per tick bijopgeteld word.
@@ -19,7 +19,7 @@ type: CAR
 # Item van het voertuig. Link voor documentatie: https://www.spigotmc.org/wiki/itemstack-serialization/
 skin:
   ==: org.bukkit.inventory.ItemStack
-  damage: 1033
+  damage: 1030
   meta:
     ==: ItemMeta
     meta-type: UNSPECIFIC
