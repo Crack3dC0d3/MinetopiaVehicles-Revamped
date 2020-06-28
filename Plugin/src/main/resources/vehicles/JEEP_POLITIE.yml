@@ -1,7 +1,7 @@
 # Naam van het voertuig. Moet uniek zijn. Word gebrukt als identificatie voor commands etc
-name: JEEP_ROOD
+name: JEEP_POLITIE
 # Naam dat spelers ingame zien.
-displayname: §6Jeep Rood
+displayname: §6Jeep Politie
 # Hoe snel het voertuig op zijn maximum gaat
 baseSpeed: 50
 # Hoeveel snelheid er per tick bijopgeteld word.
