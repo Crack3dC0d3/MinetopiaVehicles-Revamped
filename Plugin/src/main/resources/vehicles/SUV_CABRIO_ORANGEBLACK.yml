@@ -1,28 +1,40 @@
 # Naam van het voertuig. Moet uniek zijn. Word gebrukt als identificatie voor commands etc
-name: HOTROD_ZWART
+name: SUV_CABRIO_ORANGEBLACK
 # Naam dat spelers ingame zien.
-displayname: §6Hotrod Zwart
+displayname: §6SUV Cabrio OrangeBlack
 # Hoe snel het voertuig op zijn maximum gaat
-baseSpeed: 50
+baseSpeed: 40
 # Hoeveel snelheid er per tick bijopgeteld word.
-traction: 0.03
+traction: 0.02
 # De bestuurderstoel. Moet bestaan in seatOffsets
 mainSeat: "seat1"
 # Offset van de stoel vanaf de armorstand van het voertuig
 seatOffsets:
   seat1:
-    x: -0.1
-    y: -1
-    z: 0
+    x: 0
+    y: -0.9
+    z: 0.4
+  seat2:
+    x: 0
+    y: -0.9
+    z: -0.4
+  seat3:
+    x: -0.9
+    y: -0.9
+    z: 0.4
+  seat4:
+    x: -0.9
+    y: -0.9
+    z: -0.4
 # Het type voertuig. CAR voor een auto/motor. HELICOPTER voor een helikopter.
 type: CAR
 # Item van het voertuig. Link voor documentatie: https://www.spigotmc.org/wiki/itemstack-serialization/
 skin:
   ==: org.bukkit.inventory.ItemStack
-  damage: 1075
+  damage: 1198
   meta:
     ==: ItemMeta
     meta-type: UNSPECIFIC
-    Damage: 1006
+    Damage: 1137
     Unbreakable: true
   type: DIAMOND_HOE

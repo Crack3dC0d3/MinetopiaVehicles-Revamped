@@ -14,18 +14,18 @@ seatOffsets:
     x: 0
     y: -0.9
     z: 0.4
-#  seat2:
-#    x: 0
-#    y: -0.9
-#    z: -0.4
-#  seat3:
-#    x: -0.9
-#    y: -0.9
-#    z: 0.4
-#  seat4:
-#    x: -0.9
-#    y: -0.9
-#    z: -0.4
+  seat2:
+    x: 0
+    y: -0.9
+    z: -0.4
+  seat3:
+    x: -0.9
+    y: -0.9
+    z: 0.4
+  seat4:
+    x: -0.9
+    y: -0.9
+    z: -0.4
 # Het type voertuig. CAR voor een auto/motor. HELICOPTER voor een helikopter.
 type: CAR
 # Item van het voertuig. Link voor documentatie: https://www.spigotmc.org/wiki/itemstack-serialization/
