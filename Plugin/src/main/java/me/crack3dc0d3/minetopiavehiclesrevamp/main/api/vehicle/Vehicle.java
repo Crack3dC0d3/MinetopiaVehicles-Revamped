@@ -16,9 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Vehicle {
 
@@ -37,7 +35,7 @@ public class Vehicle {
     @Expose
     private double baseSpeed;
     @Expose
-    private List<UUID> members, riders;
+    private Set<UUID> members, riders;
     private ItemStack skinItem;
     @Expose
     private VehicleType type;
@@ -68,8 +66,8 @@ public class Vehicle {
         }
         this.seats = seatList.toArray(new Seat[0]);
 
-        riders = new ArrayList<>();
-        members = new ArrayList<>();
+        riders = new HashSet<>();
+        members = new HashSet<>();
         this.type = base.getType();
 
         if(base.getType() == VehicleType.HELICOPTER) {
@@ -94,7 +92,6 @@ public class Vehicle {
         vehicle.setCollidable(false);
         vehicle.setGravity(true);
         vehicle.setVisible(false);
-        vehicle.setCustomNameVisible(true);
 
         this.mainStand = vehicle;
 
@@ -114,14 +111,12 @@ public class Vehicle {
         skinStand.setInvulnerable(true);
         skinStand.setCustomName("MINETOPIAVEHICLES_SKIN_" + licensePlate);
         skinStand.setGravity(false);
-        skinStand.setCustomNameVisible(true);
 
         if(type == VehicleType.HELICOPTER) {
             this.bladeStand = mainStand.getWorld().spawn(mainStand.getLocation().add(0, -0.15, -0.8), ArmorStand.class);
             bladeStand.setGravity(false);
             bladeStand.setVisible(false);
             bladeStand.setCustomName("MINETOPIAVEHICLES_WIEKEN_" + licensePlate);
-            bladeStand.setCustomNameVisible(true);
 
 
 
@@ -238,31 +233,35 @@ public class Vehicle {
         return mainStand;
     }
 
-    public void addRider(OfflinePlayer rider) {
-        riders.add(rider.getUniqueId());
+    public boolean addRider(OfflinePlayer rider) {
+        boolean added = riders.add(rider.getUniqueId());
         Main.getDatabaseUtil().saveVehicle(this);
+        return added;
     }
 
-    public void addMember(OfflinePlayer member) {
-        members.add(member.getUniqueId());
+    public boolean addMember(OfflinePlayer member) {
+        boolean added = members.add(member.getUniqueId());
         Main.getDatabaseUtil().saveVehicle(this);
+        return added;
     }
 
-    public void removeRider(OfflinePlayer rider) {
-        riders.remove(rider.getUniqueId());
+    public boolean removeRider(OfflinePlayer rider) {
+        boolean removed = riders.remove(rider.getUniqueId());
         Main.getDatabaseUtil().saveVehicle(this);
+        return removed;
     }
 
-    public void removeMember(OfflinePlayer member) {
-        members.remove(member.getUniqueId());
+    public boolean removeMember(OfflinePlayer member) {
+        boolean removed = members.remove(member.getUniqueId());
         Main.getDatabaseUtil().saveVehicle(this);
+        return removed;
     }
 
-    public List<UUID> getMembers() {
+    public Set<UUID> getMembers() {
         return members;
     }
 
-    public List<UUID> getRiders() {
+    public Set<UUID> getRiders() {
         return riders;
     }
 

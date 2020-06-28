@@ -1,0 +1,28 @@
+# Naam van het voertuig. Moet uniek zijn. Word gebrukt als identificatie voor commands etc
+name: FIETS_VROUW_FELROZE
+# Naam dat spelers ingame zien.
+displayname: §6Fiets Felroze (Vrouw)
+# Hoe snel het voertuig op zijn maximum gaat
+baseSpeed: 15
+# Hoeveel snelheid er per tick bijopgeteld word.
+traction: 0.005
+# De bestuurderstoel. Moet bestaan in seatOffsets
+mainSeat: "seat1"
+# Offset van de stoel vanaf de armorstand van het voertuig
+seatOffsets:
+  seat1:
+    x: -0.5
+    y: -0.65
+    z: 0
+# Het type voertuig. CAR voor een auto/motor. HELICOPTER voor een helikopter.
+type: CAR
+# Item van het voertuig. Link voor documentatie: https://www.spigotmc.org/wiki/itemstack-serialization/
+skin:
+  ==: org.bukkit.inventory.ItemStack
+  damage: 1226
+  meta:
+    ==: ItemMeta
+    meta-type: UNSPECIFIC
+    Damage: 1150
+    Unbreakable: true
+  type: DIAMOND_HOE

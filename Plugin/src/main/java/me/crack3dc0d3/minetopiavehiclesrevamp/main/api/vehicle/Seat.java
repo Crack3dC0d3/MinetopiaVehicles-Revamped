@@ -44,7 +44,6 @@ public class Seat {
         stand.setCollidable(false);
         stand.setGravity(false);
         stand.setVisible(false);
-        stand.setCustomNameVisible(true);
         if(this.getMainVehicle().getMainSeat() == this) {
             stand.setCustomName("MINETOPIAVEHICLES_MAINSEAT_" + mainVehicle.getLicensePlate());
         } else {
@@ -128,8 +127,7 @@ public class Seat {
         if (l == null) {
             return "";
         }
-        //TODO Change fietsbel to something else?
-        return "fietsbel:" + l.getX() + ":" + l.getY() + ":" + l.getZ();
+        return "radomplaceholder:" + l.getX() + ":" + l.getY() + ":" + l.getZ();
     }
 
     private Location deserializeLocation(final String s) {

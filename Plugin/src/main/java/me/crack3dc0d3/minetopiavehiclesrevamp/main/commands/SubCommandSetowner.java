@@ -10,56 +10,43 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class SubCommandSetowner implements ISubCommand {
-    @Override
-    public String getPermission() {
-        return "minetopiavehicles.command.setowner";
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class SubCommandSetowner extends SubCommand {
+    public SubCommandSetowner() {
+        super("setowner", "Verander de eigenaar van een voertuig", "setowner <player>",
+                "minetopiavehicles.command.setowner");
     }
 
     @Override
-    public String getName() {
-        return "setowner";
-    }
-
-    @Override
-    public String getDescription() {
-        return "Changes the owner of a vehicle";
-    }
-
-    @Override
-    public String getUsage() {
-        return "vehicle setowner <player>";
-    }
-
-    @Override
-    public void execute(CommandSender sender, Command command, String[] args) {
-        if(args.length != 1) {
-            Messages.send(sender, Messages.INVALID_ARGUMENTS, "/" + getUsage());
-            return;
-        }
-        if(sender instanceof Player) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
+        if (args.length < 1) return false;
+        if (sender instanceof Player) {
             Player p = (Player) sender;
             OfflinePlayer offlineTarget = Bukkit.getOfflinePlayer(args[0]);
             if(!offlineTarget.hasPlayedBefore()) {
                 Messages.send(sender, Messages.NEVER_JOINED, args[0]);
-                return;
+                return true;
             }
             ItemStack itemInHand = p.getInventory().getItemInMainHand();
             if(itemInHand.getItemMeta() != null && itemInHand.getItemMeta().getLore() != null) {
                 Vehicle v = VehicleManager.getVehicleByPlate(itemInHand.getItemMeta().getLore().get(1).replace("\u00A7a", ""));
                 if(v == null) {
                     Messages.send(sender, Messages.NO_VEHICLE_IN_HAND);
-                    return;
+                    return true;
                 }
                 v.setOwner(offlineTarget);
                 Messages.send(sender, Messages.OWNER_CHANGED, offlineTarget.getName());
-            } else {
-                Messages.send(sender, Messages.NO_VEHICLE_IN_HAND);
-            }
-        } else {
-            Messages.send(sender, Messages.ONLY_PLAYER);
-        }
+            } else Messages.send(sender, Messages.NO_VEHICLE_IN_HAND);
+        } else Messages.send(sender, Messages.ONLY_PLAYER);
+        return true;
+    }
 
-
+    @Override
+    public List<String> onTabComplete(String[] args) {
+        if (args.length == 1) return Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList());
+        else return new ArrayList<>();
     }
 }

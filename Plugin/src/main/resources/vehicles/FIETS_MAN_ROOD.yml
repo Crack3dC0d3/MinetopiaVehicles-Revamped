@@ -1,5 +1,5 @@
 # Naam van het voertuig. Moet uniek zijn. Word gebrukt als identificatie voor commands etc
-name: Fiets_MAN_ROOD
+name: FIETS_MAN_ROOD
 # Naam dat spelers ingame zien.
 displayname: §6Fiets Rood (Man)
 # Hoe snel het voertuig op zijn maximum gaat

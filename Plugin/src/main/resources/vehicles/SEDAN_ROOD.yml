@@ -27,6 +27,5 @@ skin:
   meta:
     ==: ItemMeta
     meta-type: UNSPECIFIC
-    Damage: 1041
     Unbreakable: true
   type: DIAMOND_HOE
