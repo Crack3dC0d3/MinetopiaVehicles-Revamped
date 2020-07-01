@@ -8,4 +8,5 @@ Laatste release: https://www.spigotmc.org/resources/minetopiavehicles-revamp.807
 
 # Info
 Discord: https://discord.gg/VuQEpAz
+
 Contributors: https://github.com/Crack3dC0d3/MinetopiaVehicles-Revamped/graphs/contributors
