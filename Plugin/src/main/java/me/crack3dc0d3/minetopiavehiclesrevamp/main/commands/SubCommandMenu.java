@@ -53,9 +53,9 @@ public class SubCommandMenu extends SubCommand {
                 if(vehiclePos % 45 == 0 && vehiclePos >= 45 || vehiclePos == vehiclesize - 1) {
                     holder.setIcon(45, new Icon(
                             new ItemFactory(Material.PAPER)
-                                    .setName("&6Terug naar het begin")
+                                    .setName("&6Vorige Pagina")
                                     .toItemStack())
-                            .addClickAction(player1 -> player1.openInventory(pages.get(0).getInventory())));
+                            .addClickAction(player1 -> player1.openInventory(pages.get(curPage - 2).getInventory())));
                     holder.setIcon(49, new Icon(
                             new ItemFactory(Material.BARRIER)
                                     .setName("&6Sluiten")

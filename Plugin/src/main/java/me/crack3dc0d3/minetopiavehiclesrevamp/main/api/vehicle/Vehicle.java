@@ -42,6 +42,8 @@ public class Vehicle {
     @Expose
     private double upSpeed, downSpeed;
     @Expose
+    private int fuelLevel;
+    @Expose
     private double maxUpSpeed, maxDownSpeed;
     @Expose
     private boolean spawned;
@@ -76,7 +78,7 @@ public class Vehicle {
             maxDownSpeed = base.getMaxDownSpeed();
             downSpeed = base.getDownSpeed();
         }
-
+        fuelLevel = 100;
         spawned = false;
         VehicleManager.addVehicle(this);
         Main.getDatabaseUtil().saveVehicle(this);
@@ -195,6 +197,14 @@ public class Vehicle {
 
     public Seat[] getSeats() {
         return seats;
+    }
+
+    public int getFuelLevel() {
+        return fuelLevel;
+    }
+
+    public void setFuelLevel(int fuelLevel) {
+        this.fuelLevel = fuelLevel;
     }
 
     public String getLicensePlate() {

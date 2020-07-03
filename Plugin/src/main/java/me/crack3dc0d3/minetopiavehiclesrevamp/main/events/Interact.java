@@ -1,17 +1,26 @@
 package me.crack3dc0d3.minetopiavehiclesrevamp.main.events;
 
+import com.comphenix.protocol.PacketType;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.enums.VehicleType;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Seat;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Vehicle;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleManager;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.Methods;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.enums.Messages;
+import org.bukkit.Material;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 
 public class Interact implements Listener {
 
@@ -85,13 +94,31 @@ public class Interact implements Listener {
                     if(v.getType() == VehicleType.HELICOPTER) {
                         v.showWieken();
                     }
+                    Methods.setBarVisible(event.getPlayer(), true);
                 } else {
                     Messages.send(event.getPlayer(), Messages.NO_PERMISSION);
                 }
                 event.setCancelled(true);
             }
         }
-
     }
+
+    @EventHandler
+    public void onPunch(EntityDamageByEntityEvent event) {
+        if(event.getDamager() instanceof Player && event.getEntity() instanceof ArmorStand) {
+            if(event.getEntity().getCustomName() != null && event.getEntity().getCustomName().startsWith("MINETOPIAVEHICLES_")) {
+                Player p = (Player) event.getDamager();
+                ItemStack item = p.getInventory().getItemInMainHand();
+                if (item.getType() == Material.DIAMOND_HOE && item.getDurability() == 59) {
+                    p.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                }
+                String[] vehiclename = event.getEntity().getCustomName().split("_");
+                Vehicle v = VehicleManager.getVehicleByPlate(vehiclename[2]);
+                v.setFuelLevel(100);
+                Methods.updateBar(p, v.getFuelLevel() <= 10 ? BarColor.RED : v.getFuelLevel() <= 75 ? BarColor.YELLOW : BarColor.GREEN, "Brandstof: " + v.getFuelLevel() + "%", BarStyle.SOLID, v.getFuelLevel() / 100f, true);
+            }
+        }
+    }
+
 
 }

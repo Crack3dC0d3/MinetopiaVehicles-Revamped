@@ -35,7 +35,7 @@ public class SubCommandInfo extends SubCommand {
                         .collect(Collectors.joining(", "));
 
                 StringJoiner joiner = new StringJoiner("\n" + ChatColor.AQUA,
-                        ChatColor.AQUA + "------[&aVehicle Info&2]------\n", "");
+                        ChatColor.AQUA + "------[Vehicle Info]------\n", "");
                 joiner.add("Kenteken: " + ChatColor.GREEN + v.getLicensePlate())
                       .add("Owner: " + ChatColor.GREEN + v.getOwner().getName())
                       .add("Drivers: " + ChatColor.GREEN + riders)

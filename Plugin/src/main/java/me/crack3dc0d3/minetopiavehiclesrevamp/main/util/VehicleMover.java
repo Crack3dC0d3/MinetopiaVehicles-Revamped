@@ -7,9 +7,13 @@ import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Vehicle;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleManager;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.enums.Messages;
 import org.bukkit.Location;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+
+import java.util.Random;
 
 public class VehicleMover {
 
@@ -194,6 +198,15 @@ public class VehicleMover {
         }
         //Bukkit.broadcastMessage("CurUpSpeed: "+ vehicle.getCurUpSpeed() + " UpSpeed: " + vehicle.getUpSpeed() + " MaxUpSpeed: " + vehicle.getMaxUpSpeed() + " Velocity: " + vehicle.getMainStand().getVelocity().toString());
         vehicle.updatePositions();
+
+        Random rand = new Random();
+        int randint = rand.nextInt(100);
+        if(randint == 4) {
+            vehicle.setFuelLevel(vehicle.getFuelLevel() - 1);
+            Methods.updateBar(p, vehicle.getFuelLevel() <= 10 ? BarColor.RED : vehicle.getFuelLevel() <= 75 ? BarColor.YELLOW : BarColor.GREEN, "Brandstof: " + vehicle.getFuelLevel() + "%", BarStyle.SOLID, vehicle.getFuelLevel() / 100f, true);
+
+        }
+
     }
 
 }

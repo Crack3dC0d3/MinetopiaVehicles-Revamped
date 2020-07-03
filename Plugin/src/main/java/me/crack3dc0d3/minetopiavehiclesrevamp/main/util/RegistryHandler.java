@@ -16,6 +16,7 @@ public class RegistryHandler {
     public static void register(Main main) {
         registerCommands(main);
         registerEvents(main);
+        bStats stats = new bStats(main, 8070);
     }
 
     private static void registerEvents(Main main) {

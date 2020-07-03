@@ -39,7 +39,6 @@ public final class Main extends JavaPlugin {
 
     private static ProtocolManager protocolManager;
 
-    private String version = "0.0.1d-BETA";
 
 
     @Override
@@ -70,9 +69,10 @@ public final class Main extends JavaPlugin {
         protocolManager = ProtocolLibrary.getProtocolManager();
         loadNMS();
         nms.handleInput(protocolManager, this);
-        switch (settings.getConfig().getString("datastorage-type")) {
-            case "mysql": databaseUtil = new MySQLDataSource(); break;
-            default: databaseUtil = new SQLiteDataSource();
+        if ("mysql".equals(settings.getConfig().getString("datastorage-type"))) {
+            databaseUtil = new MySQLDataSource();
+        } else {
+            databaseUtil = new SQLiteDataSource();
         }
         databaseUtil.init();
         //Bukkit.getPluginManager().registerEvents(new Interact(), this);
@@ -114,6 +114,7 @@ public final class Main extends JavaPlugin {
                                             Seat.addSeat(v.getSeats()[seatCount]);
                                             break;
                                     }
+                                    Bukkit.getLogger().log(Level.INFO, "Updated vehicle " + strings[2]);
                                 }
                             }
                         }

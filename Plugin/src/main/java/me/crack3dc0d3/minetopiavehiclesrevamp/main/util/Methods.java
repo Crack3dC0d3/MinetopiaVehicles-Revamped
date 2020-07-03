@@ -5,11 +5,22 @@ import me.crack3dc0d3.minetopiavehiclesrevamp.api.InputHandler;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.Main;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Seat;
 import org.apache.commons.lang.RandomStringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashMap;
+
 public class Methods implements ApiMethods {
+
+    private static HashMap<Player, BossBar> bars = new HashMap<>();
+
     public static void setPosition(ArmorStand as, Location loc) {
         Main.getInstance().getNms().setPosition(as, loc);
     }
@@ -42,4 +53,26 @@ public class Methods implements ApiMethods {
             }
         }.runTask(Main.getInstance());
     }
+
+    public static void updateBar(Player player, BarColor color, String text, BarStyle style, float progress, boolean visible) {
+        BossBar bar = bars.get(player);
+        if(bar == null) {
+            bar = Bukkit.getServer().createBossBar(text, color, style);
+            bar.setProgress(progress);
+            bar.addPlayer(player);
+            bars.put(player, bar);
+        } else {
+            bar.setColor(color);
+            bar.setProgress(progress);
+            bar.setStyle(style);
+            bar.setTitle(text);
+        }
+        bar.setVisible(visible);
+    }
+
+    public static void setBarVisible(Player p, boolean visible) {
+        BossBar bar = bars.get(p);
+        bar.setVisible(visible);
+    }
+
 }
