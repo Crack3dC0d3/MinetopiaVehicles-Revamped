@@ -65,6 +65,10 @@ public class VehicleMover {
         if(!w && !s && !a && !d && !space) {
             vehicle.getMainStand().setVelocity(new Vector(0, 0, 0));
         }
+        if(vehicle.getFuelLevel() <= 0) {
+            vehicle.getMainStand().setVelocity(new Vector(0, 0, 0));
+            return;
+        }
 
         if (w) {
             if (vehicle.getCurSpeed() < vehicle.getSpeed()) {
