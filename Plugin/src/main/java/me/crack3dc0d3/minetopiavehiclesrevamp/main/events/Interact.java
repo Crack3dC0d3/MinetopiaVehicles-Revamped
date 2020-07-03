@@ -94,7 +94,7 @@ public class Interact implements Listener {
                     if(v.getType() == VehicleType.HELICOPTER) {
                         v.showWieken();
                     }
-                    Methods.setBarVisible(event.getPlayer(), true);
+                    Methods.updateBar(event.getPlayer(), v.getFuelLevel() <= 10 ? BarColor.RED : v.getFuelLevel() <= 75 ? BarColor.YELLOW : BarColor.GREEN, "Brandstof: " + v.getFuelLevel() + "%", BarStyle.SOLID, v.getFuelLevel() / 100f, true);
                 } else {
                     Messages.send(event.getPlayer(), Messages.NO_PERMISSION);
                 }
