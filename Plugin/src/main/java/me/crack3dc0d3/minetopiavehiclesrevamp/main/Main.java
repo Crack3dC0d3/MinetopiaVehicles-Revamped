@@ -1,5 +1,8 @@
 package me.crack3dc0d3.minetopiavehiclesrevamp.main;
 
+import co.aikar.taskchain.BukkitTaskChainFactory;
+import co.aikar.taskchain.TaskChain;
+import co.aikar.taskchain.TaskChainFactory;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import me.crack3dc0d3.minetopiavehiclesrevamp.api.NMS;
@@ -16,8 +19,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,30 +44,56 @@ public final class Main extends JavaPlugin {
 
     private static ProtocolManager protocolManager;
 
+    public static boolean criticalUpdate = false;
+    private static boolean cancelUpdater = false;
+    private static TaskChainFactory taskChainFactory;
+
 
 
     @Override
     public void onEnable() {
-
+        taskChainFactory = BukkitTaskChainFactory.create(this);
         instance = this;
         RegistryHandler.register(this);
         // Updat3r
 
         Updat3r updat3r = Updat3r.getInstance();
-        Updat3r.Update update = updat3r.getLatestUpdate("mtvehicles-opensource", "qq8lwF7kREzIYLZs3p38GNXUaccvBQ2c");
-        if(update != null) {
-            if(!update.getVersion().equals(this.getDescription().getVersion())) {
-                if(update.isCritical()) {
-                    this.getLogger().log(Level.SEVERE, "A Critical update has been found. Server will restart now!");
-                    updat3r.downloadLatest(update.getDownloadLink(), "mtvehicles-opensource", this);
-                    Bukkit.shutdown();
-                    return;
-                }
-                updat3r.downloadLatest(update.getDownloadLink(), "mtvehicles-opensource", this);
-                getLogger().log(Level.INFO, "An update has been found and downloaded. Server will restart once its downloaded!");
-                return;
+
+        (new BukkitRunnable() {
+            @Override
+            public void run() {
+                newChain()
+                        .sync(() -> getLogger().log(Level.INFO, "Checking for updates..."))
+                        .<Updat3r.Update>asyncFirstCallback(next -> {
+                            Updat3r.Update update = updat3r.getLatestUpdate("Mtvehicles-opensource", "qq8lwF7kREzIYLZs3p38GNXUaccvBQ2c");
+                            if(update == null) {
+                                getLogger().info("Update check failed. No versions found!");
+                            }
+                            next.accept(update);
+                        })
+                        .abortIfNull()
+                        .sync(input -> {
+                            if (!input.getVersion().equals(Main.getInstance().getDescription().getVersion())) {
+                                if (input.isCritical()) {
+                                    Main.getInstance().getLogger().log(Level.SEVERE, "A Critical update has been found. Please restart the server immediately!");
+                                    updat3r.downloadLatest(input.getDownloadLink(), "Mtvehicles-opensource", Main.getInstance());
+                                    return input;
+                                }
+                                updat3r.downloadLatest(input.getDownloadLink(), "Mtvehicles-opensource", Main.getInstance());
+                                getLogger().log(Level.INFO, "An update has been found and downloaded. Will be applied next update!");
+                                for (Player p : Bukkit.getOnlinePlayers()
+                                     ) {
+                                    if(p.isOp()) {
+                                        p.sendMessage("\u00a74MinetopiaVehicles has found an update. Restart your server to apply it!");
+                                    }
+                                }
+                            }
+                            return input;
+                        })
+                        .syncLast(input -> criticalUpdate = input.isCritical())
+                        .execute((task) -> getLogger().info("Update check completed!"));
             }
-        }
+        }).runTaskTimerAsynchronously(this, 0, 20L*60*30);
 
         loadFiles();
 
@@ -164,7 +195,7 @@ public final class Main extends JavaPlugin {
         } catch (final Exception e) {
             e.printStackTrace();
             this.getLogger().severe("Support voor deze CraftBukkit versie is niet gevonden.");
-            this.getLogger().info("Voor updates kijk op <hiermoetnogeenspigoturl>");
+            this.getLogger().info("Voor updates kijk op http://download.minetopiavehicles.me/");
             this.setEnabled(false);
             return;
         }
@@ -224,6 +255,7 @@ public final class Main extends JavaPlugin {
         settings.getConfig().addDefault("mysql.host", "host");
         settings.getConfig().addDefault("mysql.port", "port");
         settings.getConfig().addDefault("mysql.database", "database");
+        settings.getConfig().addDefault("enable-cruisecontrol", false);
         settings.getConfig().options().copyDefaults(true);
         settings.saveConfig();
 
@@ -287,4 +319,13 @@ public final class Main extends JavaPlugin {
     public static IDataSource getDatabaseUtil() {
         return databaseUtil;
     }
+
+
+    public static <T> TaskChain<T> newChain() {
+        return taskChainFactory.newChain();
+    }
+    public static <T> TaskChain<T> newSharedChain(String name) {
+        return taskChainFactory.newSharedChain(name);
+    }
+
 }

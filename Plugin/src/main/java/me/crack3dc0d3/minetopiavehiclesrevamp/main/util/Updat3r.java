@@ -13,6 +13,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 
 public class Updat3r {
 
@@ -75,15 +77,18 @@ public class Updat3r {
 
                 FileOutputStream outputStream = new FileOutputStream(saveFilePath);
 
-                int bytesRead = -1;
-                byte[] buffer = new byte[4096];
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, bytesRead);
-                }
+//                int bytesRead = -1;
+//                byte[] buffer = new byte[4096];
+//                while ((bytesRead = inputStream.read(buffer)) != -1) {
+//                    outputStream.write(buffer, 0, bytesRead);
+//                }
+
+                ReadableByteChannel channel = Channels.newChannel(inputStream);
+                outputStream.getChannel().transferFrom(channel, 0, Long.MAX_VALUE);
+                System.out.println(fileURL);
 
                 outputStream.close();
                 inputStream.close();
-                Bukkit.shutdown();
             } else {
                 System.out.println("[Minetopiavehicles Updat3r] An error has occured whilst downloading this resource. Contact support on discord: discord.gg/cuUfg4m  (resp. code: " + responseCode + ")");
             }

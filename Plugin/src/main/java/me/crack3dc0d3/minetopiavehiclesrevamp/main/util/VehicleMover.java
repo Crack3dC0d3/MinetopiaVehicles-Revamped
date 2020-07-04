@@ -70,6 +70,8 @@ public class VehicleMover {
             return;
         }
 
+        boolean cruiseControlEnabled = space && Main.getSettings().getConfig().getBoolean("enable-cruisecontrol") && vehicle.getType() == VehicleType.CAR;
+
         if (w) {
             if (vehicle.getCurSpeed() < vehicle.getSpeed()) {
                 if (vehicle.getCurSpeed() < 0) {
@@ -90,7 +92,7 @@ public class VehicleMover {
             } else {
                 vehicle.setCurSpeed(-(vehicle.getSpeed() / 4D));
             }
-        } else {
+        } else if(!cruiseControlEnabled) {
             double breakSpeed = Main.getInstance().getSettings().getConfig().getDouble("breakSpeed");
 
             if(vehicle.getCurSpeed() >= -(breakSpeed) && vehicle.getCurSpeed() <= breakSpeed) {
