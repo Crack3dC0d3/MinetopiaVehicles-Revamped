@@ -1,12 +1,18 @@
 package me.crack3dc0d3.minetopiavehiclesrevamp.main.events;
 
 import com.comphenix.protocol.PacketType;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.Main;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.enums.VehicleType;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Seat;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.Vehicle;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.api.vehicle.VehicleManager;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.ItemFactory;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.Methods;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.TrunkUtil;
 import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.enums.Messages;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.inventories.ClickAction;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.inventories.CustomHolder;
+import me.crack3dc0d3.minetopiavehiclesrevamp.main.util.inventories.Icon;
 import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -63,8 +69,27 @@ public class Interact implements Listener {
                 Vehicle v = VehicleManager.getVehicleByPlate(strings[strings.length-1]);
                 // Pickup system
                 if(event.getPlayer().isSneaking() && (v.getOwner() == event.getPlayer() || event.getPlayer().hasPermission("minetopiavehicles.staff.overrideowner")) ) {
-                    v.despawn(event.getPlayer());
-                    return;
+                    if (Main.getSettings().getConfig().getBoolean("enable-achterbak")) {
+                        CustomHolder holder = new CustomHolder(9, "Voertuig menu");
+                        holder.setIcon(2, new Icon(
+                                new ItemFactory(Material.BARRIER)
+                                .setName("&6Oppakken")
+                                .toItemStack())
+                        .addClickAction(player -> {
+                            player.closeInventory();
+                            v.despawn(player);
+                        }));
+                        holder.setIcon(6, new Icon(
+                                new ItemFactory(Material.CHEST)
+                                .setName("&6Achterbak")
+                                .toItemStack())
+                        .addClickAction(player -> TrunkUtil.openTrunk(v, player)));
+                        event.getPlayer().openInventory(holder.getInventory());
+                        return;
+                    } else {
+                        v.despawn(event.getPlayer());
+                        return;
+                    }
                 }
                 if(!v.getMainSeat().getSeatStand().getPassengers().isEmpty()) {
                     for(Seat seat : v.getSeats()) {
@@ -91,10 +116,12 @@ public class Interact implements Listener {
                 } else if (v.getOwner() == event.getPlayer() || v.getRiders().contains(event.getPlayer().getUniqueId()) || event.getPlayer().hasPermission("minetopiavehicles.staff.overrideowner")) {
                     s.getSeatStand().addPassenger(event.getPlayer());
                     event.getPlayer().setAllowFlight(true);
-                    if(v.getType() == VehicleType.HELICOPTER) {
+                    if (v.getType() == VehicleType.HELICOPTER) {
                         v.showWieken();
                     }
-                    Methods.updateBar(event.getPlayer(), v.getFuelLevel() <= 10 ? BarColor.RED : v.getFuelLevel() <= 75 ? BarColor.YELLOW : BarColor.GREEN, "Brandstof: " + v.getFuelLevel() + "%", BarStyle.SOLID, v.getFuelLevel() / 100f, true);
+                    if (!v.getName().contains("FIETS")) {
+                        Methods.updateBar(event.getPlayer(), v.getFuelLevel() <= 10 ? BarColor.RED : v.getFuelLevel() <= 75 ? BarColor.YELLOW : BarColor.GREEN, "Brandstof: " + v.getFuelLevel() + "%", BarStyle.SOLID, v.getFuelLevel() / 100f, true);
+                    }
                 } else {
                     Messages.send(event.getPlayer(), Messages.NO_PERMISSION);
                 }

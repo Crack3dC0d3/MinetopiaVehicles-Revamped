@@ -30,7 +30,7 @@ public class MySQLDataSource implements IDataSource {
 
         try(Connection con = source.getConnection()) {
             PreparedStatement stmt = con.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS vehicles (plate VARCHAR(20) NOT NULL UNIQUE PRIMARY KEY, vehicle VARCHAR(1000) NOT NULL)"
+                    "CREATE TABLE IF NOT EXISTS vehicles (plate VARCHAR(20) NOT NULL UNIQUE PRIMARY KEY, vehicle LONGTEXT NOT NULL)"
             );
             stmt.executeUpdate();
         } catch (SQLException exception) {

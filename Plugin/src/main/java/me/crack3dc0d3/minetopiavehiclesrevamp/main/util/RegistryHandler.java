@@ -24,6 +24,7 @@ public class RegistryHandler {
         pm.registerEvents(new Quit(), main);
         pm.registerEvents(new InventoryEvents(), main);
         pm.registerEvents(new Join(), main);
+        pm.registerEvents(new TrunkUtil(), main);
     }
 
     private static void registerCommands(Main main) {

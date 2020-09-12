@@ -256,6 +256,7 @@ public final class Main extends JavaPlugin {
         settings.getConfig().addDefault("mysql.port", "port");
         settings.getConfig().addDefault("mysql.database", "database");
         settings.getConfig().addDefault("enable-cruisecontrol", false);
+        settings.getConfig().addDefault("enable-achterbak", false);
         settings.getConfig().options().copyDefaults(true);
         settings.saveConfig();
 

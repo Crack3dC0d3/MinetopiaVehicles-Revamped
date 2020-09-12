@@ -34,13 +34,37 @@ public class SubCommandMenu extends SubCommand {
         for (int i = 0; i < totalPages ; i++) {
 
             int curPage = i+1;
-            CustomHolder holder = new CustomHolder(54, "\u00a76\u00a7lVoertuigen " + curPage + "/" + Math.round(totalPages));
+            CustomHolder holder = new CustomHolder(54, "\u00a76\u00a7lVoertuigen");
 
 //            int a = vehiclesToAdd / 45;
 //            int overige = vehiclesToAdd % 45;
+
+            holder.addIcon(new Icon(
+                    new ItemFactory(Material.DIAMOND_HOE)
+                            .setDurability((short) 1045)
+                            .setName("&6Fietsen").
+                            toItemStack())
+                    .addClickAction(player -> player.openInventory(generateMenu("FIETS", "Fietsen", holder).getInventory())));
+
+            holder.addIcon(new Icon(
+                    new ItemFactory(Material.DIAMOND_HOE)
+                            .setDurability((short) 1045)
+                            .setName("&62 Persoons autos")
+                            .toItemStack())
+                    .addClickAction(player -> player.openInventory(generateMenu("SEDAN", "2 Persoons autos", holder).getInventory())));
+
+            holder.addIcon(new Icon(new ItemFactory(Material.DIAMOND_HOE).setDurability((short) 1045).setName("Fietsen").toItemStack()));
+
+
+
+
+
+
+
+
+
             int pos = 0;
             while(vehiclePos < vehiclesize) {
-
                 VehicleBase base = VehicleManager.getBaseVehicles().get(vehiclePos);
 
                 holder.setIcon(pos, new Icon(new ItemFactory(base.getSkinItem())
@@ -78,12 +102,34 @@ public class SubCommandMenu extends SubCommand {
                     vehiclePos++;
                     pos++;
                 }
-
-
             }
 
         }
         ((Player) sender).openInventory(pages.get(0).getInventory());
         return false;
     }
+
+
+    public static CustomHolder generateMenu(String vehicleType, String displayname, CustomHolder main) {
+        CustomHolder menu = new CustomHolder(54, "\u00a76\u00a7l" + displayname);
+        for (VehicleBase base : VehicleManager.getBaseVehicles()) {
+            if (base.getName().contains(vehicleType)) {
+                menu.addIcon(new Icon(new ItemFactory(base.getSkinItem())
+                        .setLore(" ", "&aXX-XX-XX")
+                        .setName(base.getDisplayname()).toItemStack())
+                        .addClickAction(player1 -> {
+                            VehicleManager.giveVehicle(base, Bukkit.getOfflinePlayer(player1.getUniqueId()));
+                            player1.closeInventory();
+                        }));
+                menu.setIcon(49, new Icon(
+                        new ItemFactory(Material.BARRIER)
+                                .setName("&cTerug")
+                                .toItemStack())
+                        .addClickAction(player1 -> player1.openInventory(main.getInventory())));
+            }
+        }
+        return menu;
+    }
+
+
 }

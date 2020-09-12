@@ -207,10 +207,9 @@ public class VehicleMover {
 
         Random rand = new Random();
         int randint = rand.nextInt(100);
-        if(randint == 4) {
+        if(randint == 4 && !vehicle.getName().contains("FIETS")) {
             vehicle.setFuelLevel(vehicle.getFuelLevel() - 1);
             Methods.updateBar(p, vehicle.getFuelLevel() <= 10 ? BarColor.RED : vehicle.getFuelLevel() <= 75 ? BarColor.YELLOW : BarColor.GREEN, "Brandstof: " + vehicle.getFuelLevel() + "%", BarStyle.SOLID, vehicle.getFuelLevel() / 100f, true);
-
         }
 
     }

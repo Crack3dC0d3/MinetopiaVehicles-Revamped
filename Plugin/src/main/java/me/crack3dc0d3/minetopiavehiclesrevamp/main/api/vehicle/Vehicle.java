@@ -12,6 +12,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -49,7 +50,15 @@ public class Vehicle {
     private boolean spawned;
     @Expose
     private UUID owneruuid;
+
     private OfflinePlayer owner;
+
+    @Expose
+    private String trunkString;
+
+    private Inventory trunk;
+
+
 
     public Vehicle(@NotNull VehicleBase base, String licensePlate, @NotNull OfflinePlayer owner) {
         this.traction = base.getTraction();
@@ -393,6 +402,22 @@ public class Vehicle {
 
     public void setCurSpeed(double curSpeed) {
         this.curSpeed = curSpeed;
+    }
+
+    public String getTrunkString() {
+        return trunkString;
+    }
+
+    public void setTrunkString(String trunkString) {
+        this.trunkString = trunkString;
+    }
+
+    public void setTrunk(Inventory trunk) {
+        this.trunk = trunk;
+    }
+
+    public Inventory getTrunk() {
+        return trunk;
     }
 
     public void showWieken() {
