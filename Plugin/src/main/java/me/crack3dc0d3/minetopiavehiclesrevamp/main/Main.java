@@ -245,7 +245,6 @@ public final class Main extends JavaPlugin {
         settings = new Config("settings.yml");
 
         settings.loadConfig();
-
         settings.getConfig().addDefault("max-helicopter-height", 200);
         settings.getConfig().addDefault("breakSpeed", 0.05);
         settings.getConfig().addDefault("enable-levelcheck-vehicles", true);

@@ -39,7 +39,6 @@ public enum Messages {
 
     public static void send(CommandSender player, Messages key, Object... placeholders) {
         if (Main.getMessages().getConfig().getString(key.toString()) != null) {
-            System.out.println("placeholders = " + Arrays.toString(placeholders));
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                     String.format(Main.getMessages().getConfig().getString(key.toString()), placeholders)));
         } else {

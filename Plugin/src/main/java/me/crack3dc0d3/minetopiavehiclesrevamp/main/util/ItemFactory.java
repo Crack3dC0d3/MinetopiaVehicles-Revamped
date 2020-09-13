@@ -547,47 +547,9 @@ public class ItemFactory {
      */
 
     public ItemFactory unbreakable() {
-
-        try {
-
-            Class<?> craftItemStack = this.getBukkitClass("inventory", "CraftItemStack");
-            Method nmsCopy = craftItemStack.getMethod("asNMSCopy", ItemStack.class);
-            Object nmsStack = nmsCopy.invoke(null, this.is);
-
-            Class<?> nmsStackClass = nmsStack.getClass();
-            Method hasTag = nmsStackClass.getMethod("hasTag");
-            Method getTag = nmsStackClass.getMethod("getTag");
-
-            Boolean tag = (Boolean) hasTag.invoke(nmsStack);
-
-            Class<?> nbtTagCompound = this.getNMSClass("NBTTagCompound");
-            Object compound;
-
-            if (tag) {
-                compound = getTag.invoke(nmsStack);
-            } else {
-                compound = nbtTagCompound.newInstance();
-            }
-
-            Method setTag = nmsStackClass.getMethod("setTag", nbtTagCompound);
-
-            Class<?> compoundClass = compound.getClass();
-            Class<?> nbtTagBase = this.getNMSClass("NBTBase");
-            Class<?> nbtTagInt = this.getNMSClass("NBTTagInt");
-
-            Method set = compoundClass.getMethod("set", String.class, nbtTagBase);
-            set.invoke(compound, "Unbreakable", nbtTagInt.getConstructor(int.class).newInstance(1));
-
-            setTag.invoke(nmsStack, compound);
-
-            Method asBukkitCopy = craftItemStack.getMethod("asBukkitCopy", nmsStackClass);
-            this.is = (ItemStack) asBukkitCopy.invoke(null, nmsStack);
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-        }
+        ItemMeta meta = is.getItemMeta();
+        meta.setUnbreakable(true);
+        is.setItemMeta(meta);
 
         return this;
 
